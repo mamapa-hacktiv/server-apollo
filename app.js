@@ -1,9 +1,7 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const axios = require('axios')
-const redis = require('./config/redisConnection')
-const APP_SERVICE_URL = process.env.APP_SERVICE_URL || 'http://localhost:4002'
-const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:4001'
+const { Reaction, Recipe, Ingredient, Step, Comment, User } = require('./models')
 
 const typeDefs = `#graphql
 
@@ -20,6 +18,7 @@ const typeDefs = `#graphql
     id: ID
     RecipeId: Int
     UserId: Int
+    Recipe: Recipe
     createdAt: String
     updatedAt: String
   }
@@ -36,10 +35,29 @@ const typeDefs = `#graphql
     image: String
     description: String
     videoUrl: String
-    origin: Int
+    origin: String
     portion: String
     cookingTime: Int
     UserId: Int
+    Reactions: [Reaction] 
+    Steps: [Step]
+    Comments: [Comment]
+    Ingredients: [Ingredient]
+    User: User
+    createdAt: String
+    updatedAt: String
+  }
+  type Recipes {
+    id: ID
+    title: String
+    image: String
+    description: String
+    videoUrl: String
+    origin: String
+    portion: String
+    cookingTime: Int
+    UserId: Int
+    Reactions: [Reaction] 
     createdAt: String
     updatedAt: String
   }
@@ -54,7 +72,7 @@ const typeDefs = `#graphql
   }
   type Reaction {
     id: ID
-    instruction: String
+    emoji: String
     quantity: Int
     RecipeId: Int
     UserId: Int
@@ -66,306 +84,75 @@ const typeDefs = `#graphql
     message: String
     RecipeId: Int
     UserId: Int
+    User: User
     createdAt: String
     updatedAt: String
   }
 
   type Query {
-    findUser: User
-    findMovie(id : ID!): Movie //! baru sampe sini aku ke kamar mandi dulu
-    findGenres: [Genre] 
-    findUsers: [User]
-    findUser(id : ID!): User
+    findRecipe(id : ID!): Recipe
+    findRecipes: [Recipes]
+    findFavorite: [Favorite] 
+    findMyRecipes: [Recipes]
   }
-
-  type Mutation{
-    addMovie(
-    title: String,
-    slug: String,
-    synopsis: String,
-    trailerUrl: String,
-    rating: Int,
-    imgUrl: String,
-    genreId: Int,
-    casts: [CastInput],
-    ): ResponseMessage,
-    updateMovie(
-    id: ID,
-    title: String,
-    slug: String,
-    synopsis: String,
-    trailerUrl: String,
-    rating: Int,
-    imgUrl: String,
-    genreId: Int,
-    casts: [CastInput],
-    ): ResponseMessage,
-    deleteMovie(
-    id: ID
-    ): ResponseMessage,
-    addGenre(
-    name: String,
-    ): ResponseMessage,
-    updateGenre(
-    id: ID,
-    name: String, 
-    ): ResponseMessage,
-    deleteGenre(
-    id: ID
-    ): ResponseMessage,
-    addUser(
-    username: String,
-    email: String,
-    password: String,
-    phoneNumber: String,
-    address: String,
-    ): ResponseMessage,
-    deleteUser(
-    id: ID
-    ): ResponseMessage,
-
-  }
+  
 `;
 
 const resolvers = {
   Query: {
-    findMovies: async () => {
+    findRecipes: async () => {
       try {
-        const moviesCache = await redis.get('movies')
-        if (moviesCache) {
-          const movies = JSON.parse(moviesCache)
-          return movies
+        const allRecipe = await Recipe.findAll({
+          include: [
+            {
+              model: Reaction,
+            },
+          ],
+        });
+        return allRecipe
+      } catch (error) {
+        console.log(error);
+        return error
+      }
+    },
+    findRecipe: async (_, args) => {
+      try {
+        const { id: recipeId } = args;
+        const findRecipe = await Recipe.findByPk(recipeId, {
+          include: [
+            { model: Ingredient },
+            { model: Step },
+            { model: Reaction },
+            {
+              model: Comment, include: [
+                { model: User },
+              ],
+            },
+            { model: User },
+          ],
+        });
+        if (!findRecipe) throw { name: "NotFound" };
+        return findRecipe
+      } catch (error) {
+        console.log(error);
+        if (error.name == "NotFound") {
+          return { message: "Data not found" }
         } else {
-          const { data: Movies } = await axios.get(APP_SERVICE_URL + '/movies')
-          await redis.set('movies', JSON.stringify(Movies))
-          return Movies
+          return { message: "Internal Server Error" }
         }
-      } catch (error) {
-        console.log(error);
       }
     },
-    findMovie: async (_, args) => {
-      try {
-        const { id } = args
-        const { data: Movie } = await axios.get(APP_SERVICE_URL + '/movies/' + id)
-        const { data: User } = await axios.get(USER_SERVICE_URL + '/users/' + Movie.UserMongoId)
-        Movie.User = User
-        return Movie
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    findUsers: async () => {
-      try {
-        const usersCache = await redis.get('users')
-        if (usersCache) {
-          const users = JSON.parse(usersCache)
-          return users
-        } else {
-          const { data: users } = await axios.get(USER_SERVICE_URL + '/users')
-          await redis.set('users', JSON.stringify(users))
-          return users
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    findUser: async (_, args) => {
-      try {
-        const { id } = args
-        const { data: users } = await axios.get(USER_SERVICE_URL + '/users/' + id)
-        return users
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    findGenres: async () => {
-      try {
-        const genresCache = await redis.get('genres')
-        if (genresCache) {
-          const genres = JSON.parse(genresCache)
-          return genres
-        } else {
-          const { data: genres } = await axios.get(APP_SERVICE_URL + '/genres')
-          await redis.set('genres', JSON.stringify(genres))
-          return genres
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-  Mutation: {
-    addMovie: async (_, args) => {
-      try {
-        const {
-          title,
-          slug,
-          synopsis,
-          trailerUrl,
-          rating,
-          imgUrl,
-          genreId,
-          casts } = args
-        const newMovie = {
-          title,
-          slug,
-          synopsis,
-          trailerUrl,
-          rating,
-          imgUrl,
-          genreId,
-          casts
-        }
-        const { data } = await axios({
-          method: 'post',
-          url: APP_SERVICE_URL + '/movies',
-          data: newMovie
-        })
-        await redis.del('movies')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    },
-    updateMovie: async (_, args) => {
-      try {
-        const {
-          id,
-          title,
-          slug,
-          synopsis,
-          trailerUrl,
-          rating,
-          imgUrl,
-          genreId,
-          casts } = args
-        const updatedMovie = {
-          title,
-          slug,
-          synopsis,
-          trailerUrl,
-          rating,
-          imgUrl,
-          genreId,
-          casts
-        }
-        const { data } = await axios({
-          method: 'put',
-          url: APP_SERVICE_URL + '/movies/' + id,
-          data: updatedMovie
-        })
-        await redis.del('movies')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    },
-    deleteMovie: async (_, args) => {
-      try {
-        const { id } = args
-        const { data } = await axios({
-          method: 'delete',
-          url: APP_SERVICE_URL + '/movies/' + id
-        })
-        await redis.del('movies')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    },
-    addGenre: async (_, args) => {
-      try {
-        const {
-          name,
-        } = args
-        const newGenre = {
-          name
-        }
 
-        const { data } = await axios({
-          method: 'post',
-          url: APP_SERVICE_URL + '/genres',
-          data: newGenre
-        })
-        await redis.del('genres')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    },
-    updateGenre: async (_, args) => {
-      try {
-        const {
-          id,
-          name } = args
-        const updatedGenre = {
-          name
-        }
-        const { data } = await axios({
-          method: 'patch',
-          url: APP_SERVICE_URL + '/genres/' + id,
-          data: updatedGenre
-        })
-        await redis.del('genres')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    },
-    deleteGenre: async (_, args) => {
-      try {
-        const { id } = args
-        const { data } = await axios({
-          method: 'delete',
-          url: APP_SERVICE_URL + '/genres/' + id
-        })
-        await redis.del('genres')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    },
-    addUser: async (_, args) => {
-      try {
-        const {
-          username,
-          email,
-          password,
-          phoneNumber,
-          address,
-        } = args
-        const newUser = {
-          username,
-          email,
-          password,
-          phoneNumber,
-          address,
-        }
-        const { data } = await axios({
-          method: 'post',
-          url: USER_SERVICE_URL + '/users',
-          data: newUser
-        })
-        await redis.del('users')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    },
-    deleteUser: async (_, args) => {
-      try {
-        const { id } = args
-        const { data } = await axios({
-          method: 'delete',
-          url: USER_SERVICE_URL + '/users/' + id
-        })
-        await redis.del('users')
-        return data
-      } catch (err) {
-        return (err);
-      }
-    }
+    // findUser: async (_, args) => {
+    //   try {
+    //     const { id } = args
+    //     const { data: users } = await axios.get(USER_SERVICE_URL + '/users/' + id)
+    //     return users
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+
   },
 }
 
