@@ -38,6 +38,7 @@ const typeDefs = `#graphql
     createdAt: String
     updatedAt: String
   }
+
   type Ingredient {
     id: ID
     name: String
@@ -167,7 +168,13 @@ const typeDefs = `#graphql
   type Mutation {
     register(newUser: newUser): ResponseMessage
     createRecipe(newRecipe: newRecipe): ResponseMessage
-    createComment(RecipeId: ID, message: String): ResponseMessage
+    createComment(recipeId: ID, message: String): ResponseMessage
+    createReaction(recipeId: ID, emoji: String, quantity:Int): ResponseMessage
+    createFavorite(recipeId: ID): ResponseMessage
+    deleteComment(commentId: ID): ResponseMessage
+    deleteFavorite(favoriteId: ID): ResponseMessage
+    deleteReaction(reactionId: ID): ResponseMessage
+    deleteRecipe(recipeId: ID): ResponseMessage
   }
 `;
 
@@ -378,6 +385,150 @@ const resolvers = {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
 
         const user = await authentication(contextValue.access_token);
+
+        const { recipeId, message } = args;
+
+        const comment = {
+          message: message,
+          RecipeId: recipeId,
+          UserId: user.id,
+        };
+
+        const newComment = await Comment.create(comment);
+        return `Success create comment for recipe id ${recipeId}`;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    createReaction: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const { recipeId, emoji, quantity } = args;
+
+        const reaction = {
+          emoji: emoji,
+          quantity: quantity,
+          RecipeId: recipeId,
+          UserId: user.id,
+        };
+
+        const newReaction = await Reaction.create(reaction);
+
+        return `Success create reaction for recipe with id ${recipeId}`;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    createFavorite: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const { recipeId } = args;
+        const favorite = {
+          RecipeId: recipeId,
+          UserId: user.id,
+        };
+        const newFavorite = await Favorite.create(favorite);
+
+        return `Success adding recipe with id ${recipeId} to your favorite`;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    deleteComment: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const { commentId } = args;
+
+        const findComment = await Comment.findByPk(commentId);
+
+        if (!findComment) throw { name: "NotFound" };
+
+        if (findComment.UserId != user.id) throw { name: "Not Authorized" };
+
+        const delComment = await Comment.destroy({ where: { id: commentId } });
+
+        return `successfully delete comment with id ${findComment.id}`;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    deleteFavorite: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const { favoriteId } = args;
+        const findFavorite = await Favorite.findByPk();
+
+        if (!findFavorite) throw { name: "NotFound" };
+
+        if (findFavorite.UserId != user.id) throw { name: "Not Authorized" };
+
+        const delFavorite = await Favorite.destroy({
+          where: { id: favoriteId },
+        });
+
+        return `successfully delete favorite with id ${findFavorite.id}`;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    deleteReaction: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const { reactionId } = args;
+
+        const findReaction = await Reaction.findByPk(reactionId);
+
+        if (!findReaction) throw { name: "NotFound" };
+
+        if (findReaction.UserId != user.id) throw { name: "Not Authorized" };
+
+        const delReaction = await Reaction.destroy({
+          where: { id: reactionId },
+        });
+
+        return `successfully delete reaction with id ${findReaction.id}`;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    deleteRecipe: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const { recipeId } = args;
+
+        const findRecipe = await Recipe.findByPk(recipeId);
+
+        if (!findRecipe) throw { name: "NotFound" };
+
+        if (findRecipe.UserId != user.id) throw { name: "Not Authorized" };
+
+        const delRecipe = await Recipe.destroy({ where: { id: recipeId } });
+
+        return `successfully delete recipe with id ${findRecipe.id}`;
       } catch (error) {
         console.log(error);
         throw error;
