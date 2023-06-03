@@ -5,6 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     let dataRecipes = require("../data/data.json").Recipes;
     dataRecipes.forEach((el) => {
+      delete el.id;
       el.createdAt = el.updatedAt = new Date();
     });
     await queryInterface.bulkInsert("Recipes", dataRecipes);
