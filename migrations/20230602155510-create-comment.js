@@ -10,6 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       message: {
+        allowNull: false,
         type: Sequelize.TEXT,
       },
       RecipeId: {
