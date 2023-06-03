@@ -1,8 +1,13 @@
+
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+// const { GraphQLUpload } = require('graphql-upload');
+// const imagekit = require('../helpers/imageUpload.js')
+// const stream2buffer = require('../helpers/streamToBuffer.js')
 const axios = require("axios");
 const {
   Reaction,
@@ -13,12 +18,13 @@ const {
   User,
   Favorite,
   sequelize,
-} = require("./models");
-const { createToken, decodeToken } = require("./helpers/jwt");
-const { comparePassword } = require("./helpers/bcrypt");
-const authentication = require("./middlewares/authentication");
+} = require("./models/index.js");
+const { createToken, decodeToken } = require("./helpers/jwt.js");
+const { comparePassword } = require("./helpers/bcrypt.js");
+const authentication = require("./middlewares/authentication.js");
 
 const typeDefs = `#graphql
+scalar Upload
 
   type User {
     id: ID
@@ -138,7 +144,7 @@ const typeDefs = `#graphql
 
   input newRecipe {
     title: String
-    image:String
+    image: [Upload]
     description:String
     videoUrl:String
     origin:String
@@ -179,7 +185,9 @@ const typeDefs = `#graphql
 `;
 
 const resolvers = {
+  // Upload: GraphQLUpload,
   Query: {
+    //! tambahin filter buat search masukin args
     findRecipes: async () => {
       try {
         const allRecipe = await Recipe.findAll({
@@ -244,6 +252,7 @@ const resolvers = {
         throw error;
       }
     },
+    //! tambahin findFavoritebyrecipedanuserid bailikin true false
     findMyRecipes: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
@@ -299,6 +308,7 @@ const resolvers = {
   },
 
   Mutation: {
+    //! update untuk recipe saja
     register: async (_, args) => {
       try {
         const { username, email, password, phoneNumber } = args.newUser;
@@ -308,10 +318,8 @@ const resolvers = {
           password,
           phoneNumber,
         });
-
-        const message = `user with email ${user.email} has been created`;
-
-        return `user with email ${user.email} has been created`;
+        const message = `user with email ${user.email} has been created`
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -322,9 +330,6 @@ const resolvers = {
 
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
         const {
           title,
           image,
@@ -336,6 +341,20 @@ const resolvers = {
           steps,
           ingredients,
         } = args.newRecipe;
+
+        const user = await authentication(contextValue.access_token);
+
+        //! implement upload image
+        // const result = await Promise.all(args.newRecipe.image)
+        // const imagesBufferPromises = result.map(img => {
+        //   const stream = img.createReadStream();
+        //   return stream2buffer(stream);
+        // });
+        // const imagesBuffer = await Promise.all(imagesBufferPromises);
+        // const data = await imagekit.upload({
+        //   file: imagesBuffer[0],
+        //   fileName: result[0].filename
+        // });
 
         if (!title) throw { name: "Title is required" };
 
@@ -373,7 +392,7 @@ const resolvers = {
         await t.commit();
 
         const message = "Success add recipe";
-        return "Success add recipe";
+        return { message };
       } catch (error) {
         await t.rollback();
         console.log(error);
@@ -541,6 +560,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   introspection: true,
+  csrfPrevention: false,
 });
 
 startStandaloneServer(server, {
