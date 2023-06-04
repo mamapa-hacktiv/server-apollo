@@ -1,7 +1,7 @@
 "use strict";
-const { Model } = require("sequelize");
-const { hashPassword } = require("../helpers/bcrypt");
-module.exports = (sequelize, DataTypes) => {
+import { Model } from "sequelize"
+import { hashPassword } from "../helpers/bcrypt.js"
+export default (sequelize, DataTypes) => {
   class User extends Model {
     /**
      * Helper method for defining associations.

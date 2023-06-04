@@ -1,6 +1,7 @@
 // SDK initialization
-
-const ImageKit = require("imagekit")
+import { config } from "dotenv"
+config()
+import ImageKit from "imagekit";
 
 const imagekit = new ImageKit({
   publicKey: process.env.PUBLIC_KEY_IMAGEKIT,
@@ -8,4 +9,4 @@ const imagekit = new ImageKit({
   urlEndpoint: process.env.URL_IMAGEKIT
 });
 
-module.exports = imagekit;
+export default imagekit;

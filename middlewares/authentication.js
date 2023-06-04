@@ -1,5 +1,6 @@
-const { decodeToken } = require("../helpers/jwt");
-const { User } = require("../models");
+import { decodeToken } from "../helpers/jwt.js"
+import model from "../models/index.js";
+const { User } = model
 
 async function authentication(token) {
   let payload = decodeToken(token);
@@ -12,4 +13,4 @@ async function authentication(token) {
   return user;
 }
 
-module.exports = authentication;
+export default authentication;

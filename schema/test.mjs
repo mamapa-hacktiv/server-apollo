@@ -1,22 +1,12 @@
+
 import { config } from "dotenv"
-config()
-import { ApolloServer } from "@apollo/server"
-import { startStandaloneServer } from "@apollo/server/standalone"
+if (process.env.NODE_ENV !== "production") {
+  config()
+}
 import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
-import imagekit from './helpers/imageUpload.js';
-import stream2buffer from './helpers/streamToBuffer.js';
-import axios from "axios";
-// import {
-//   Reaction,
-//   Recipe,
-//   Ingredient,
-//   Step,
-//   Comment,
-//   User,
-//   Favorite,
-//   sequelize,
-// } from "./models/index.js";
-import model from "./models/index.js";
+import imagekit from '../helpers/imageUpload.js';
+import stream2buffer from '../helpers/streamToBuffer.js';
+import model from "../models/index.js";
 const { Reaction,
   Recipe,
   Ingredient,
@@ -25,15 +15,11 @@ const { Reaction,
   User,
   Favorite,
   sequelize, } = model
-import { createToken, decodeToken } from "./helpers/jwt.js";
-import { comparePassword } from "./helpers/bcrypt.js";
-import authentication from "./middlewares/authentication.js";
+import { createToken, decodeToken } from "../helpers/jwt.js";
+import { comparePassword } from "../helpers/bcrypt.js";
+import authentication from "../middlewares/authentication.js";
 
-// console.log(process.env);
-// if (process.env.NODE_ENV !== "production") {
-// }
-
-const typeDefs = `#graphql
+export const typeDefs = `#graphql
 scalar Upload
 
   type User {
@@ -154,7 +140,7 @@ scalar Upload
 
   input newRecipe {
     title: String
-    image: String
+    image: [Upload]
     description:String
     videoUrl:String
     origin:String
@@ -166,7 +152,7 @@ scalar Upload
 
   input newStep {
     instruction: String
-    image: String
+    image: [Upload]
   }
 
   input newIngredient {
@@ -179,7 +165,6 @@ scalar Upload
     findFavorite: [Favorite] 
     findMyRecipes: [Recipes]
     login(email: String, password: String): LoginResponse
-
   }
   
   type Mutation {
@@ -195,7 +180,7 @@ scalar Upload
   }
 `;
 
-const resolvers = {
+export const resolvers = {
   Upload: GraphQLUpload,
   Query: {
     //! tambahin filter buat search masukin args
@@ -317,7 +302,6 @@ const resolvers = {
       }
     },
   },
-
   Mutation: {
     //! update untuk recipe saja
     register: async (_, args) => {
@@ -356,7 +340,7 @@ const resolvers = {
         const user = await authentication(contextValue.access_token);
 
         //! implement upload image
-        const result = await Promise.all(args.newRecipe.image)
+        const result = await Promise.all(image)
         const imagesBufferPromises = result.map(img => {
           const stream = img.createReadStream();
           return stream2buffer(stream);
@@ -567,30 +551,3 @@ const resolvers = {
   },
 };
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  introspection: true,
-  csrfPrevention: false,
-  uploads: false
-});
-
-startStandaloneServer(server, {
-  listen: { port: process.env.PORT || 4000 },
-  context: async ({ req }) => {
-    try {
-      const { access_token } = req.headers;
-
-      return { access_token };
-    } catch (error) {
-      console.log(error, "<<<");
-      throw error;
-    }
-  },
-})
-  .then(({ url }) => {
-    console.log(`🚀  Server ready at: ${url}`);
-  })
-  .catch((err) => {
-    console.log(err);
-  });

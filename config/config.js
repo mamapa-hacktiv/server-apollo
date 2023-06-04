@@ -1,4 +1,4 @@
-{
+export default {
   "development": {
     "username": "postgres",
     "password": "postgres",
