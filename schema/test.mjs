@@ -18,6 +18,7 @@ const { Reaction,
 import { createToken, decodeToken } from "../helpers/jwt.js";
 import { comparePassword } from "../helpers/bcrypt.js";
 import authentication from "../middlewares/authentication.js";
+import { Op } from "sequelize";
 
 export const typeDefs = `#graphql
 scalar Upload
@@ -160,6 +161,7 @@ scalar Upload
   }
 
   type Query {
+    recipeSearch(title:String): [Recipes]
     findRecipe(id: ID!): DetailRecipe
     findRecipes: [Recipes]
     findFavorite: [Favorite] 
@@ -183,7 +185,21 @@ scalar Upload
 export const resolvers = {
   Upload: GraphQLUpload,
   Query: {
-    //! tambahin filter buat search masukin args
+    recipeSearch: async (_, args) => {
+      try {
+        const { title } = args;
+        const result = await Recipe.findAll({
+          where: {
+            title: {
+              [Op.iLike]: `%${title}%`,
+            },
+          },
+        });
+        return result;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     findRecipes: async () => {
       try {
         const allRecipe = await Recipe.findAll({
