@@ -4,19 +4,11 @@ if (process.env.NODE_ENV !== "production") {
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const axios = require("axios");
-const {
-  Reaction,
-  Recipe,
-  Ingredient,
-  Step,
-  Comment,
-  User,
-  Favorite,
-  sequelize,
-} = require("./models");
+const { Reaction, Recipe, Ingredient, Step, Comment, User, Favorite, sequelize } = require("./models");
 const { createToken, decodeToken } = require("./helpers/jwt");
 const { comparePassword } = require("./helpers/bcrypt");
 const authentication = require("./middlewares/authentication");
+const { Op } = require("sequelize");
 
 const typeDefs = `#graphql
 
@@ -158,11 +150,13 @@ const typeDefs = `#graphql
   }
 
   type Query {
+    recipeSearch(title:String): [Recipes]
     findRecipe(id: ID!): DetailRecipe
     findRecipes: [Recipes]
     findFavorite: [Favorite] 
     findMyRecipes: [Recipes]
     login(email: String, password: String): LoginResponse
+
   }
   
   type Mutation {
@@ -180,6 +174,21 @@ const typeDefs = `#graphql
 
 const resolvers = {
   Query: {
+    recipeSearch: async (_, args) => {
+      try {
+        const { title } = args;
+        const result = await Recipe.findAll({
+          where: {
+            title: {
+              [Op.iLike]: `%${title}%`,
+            },
+          },
+        });
+        return result;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     findRecipes: async () => {
       try {
         const allRecipe = await Recipe.findAll({
@@ -325,17 +334,7 @@ const resolvers = {
 
         const user = await authentication(contextValue.access_token);
 
-        const {
-          title,
-          image,
-          description,
-          videoUrl,
-          origin,
-          portion,
-          cookingTime,
-          steps,
-          ingredients,
-        } = args.newRecipe;
+        const { title, image, description, videoUrl, origin, portion, cookingTime, steps, ingredients } = args.newRecipe;
 
         if (!title) throw { name: "Title is required" };
 
@@ -366,10 +365,7 @@ const resolvers = {
           transaction: t,
         });
 
-        const newIngredients = await Ingredient.bulkCreate(
-          ingredientsWithRecipeId,
-          { transaction: t }
-        );
+        const newIngredients = await Ingredient.bulkCreate(ingredientsWithRecipeId, { transaction: t });
         await t.commit();
 
         const message = "Success add recipe";
