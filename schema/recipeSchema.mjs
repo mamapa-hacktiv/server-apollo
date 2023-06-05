@@ -21,7 +21,7 @@ import { comparePassword } from "../helpers/bcrypt.js";
 import authentication from "../middlewares/authentication.js";
 import { Op } from "sequelize";
 
-export const typeDefs = `#graphql
+export const recipeTypeDefs = `#graphql
 scalar Upload
 
   type User {
@@ -115,6 +115,7 @@ scalar Upload
     createdAt: String
     updatedAt: String
   }
+
   type Comment {
     id: ID
     message: String
@@ -125,19 +126,8 @@ scalar Upload
     updatedAt: String
   }
 
-  type LoginResponse {
-    access_token: String
-  }
-
   type ResponseMessage {
     message: String
-  }
-
-  input newUser {
-    username: String
-    email: String
-    password: String
-    phoneNumber: String
   }
 
   input newRecipe {
@@ -165,26 +155,16 @@ scalar Upload
     recipeSearch(title:String): [Recipes]
     findRecipe(id: ID!): DetailRecipe
     findRecipes: [Recipes]
-    findFavorite: [Favorite] 
     findMyRecipes: [Recipes]
-    login(email: String, password: String): LoginResponse
-    isFavorite(recipeId: ID): Boolean
   }
   
   type Mutation {
-    register(newUser: newUser): ResponseMessage
     createRecipe(newRecipe: newRecipe): ResponseMessage
-    createComment(recipeId: ID, message: String): ResponseMessage
-    createReaction(recipeId: ID, emoji: String, quantity:Int): ResponseMessage
-    createFavorite(recipeId: ID): ResponseMessage
-    deleteComment(commentId: ID): ResponseMessage
-    deleteFavorite(favoriteId: ID): ResponseMessage
-    deleteReaction(reactionId: ID): ResponseMessage
     deleteRecipe(recipeId: ID): ResponseMessage
   }
 `;
 
-export const resolvers = {
+export const recipeResolvers = {
   Upload: GraphQLUpload,
   Query: {
     recipeSearch: async (_, args) => {
@@ -243,50 +223,6 @@ export const resolvers = {
         }
       }
     },
-    findFavorite: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const favorites = await Favorite.findAll({
-          where: {
-            UserId: user.id,
-          },
-          include: [
-            {
-              model: Recipe,
-            },
-          ],
-        });
-
-        return favorites;
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    //! tambahin findFavoritebyrecipedanuserid bailikin true false
-    isFavorite: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const { recipeId } = args;
-
-        const findRecipe = await Recipe.findByPk(recipeId);
-
-        if (findRecipe.UserId == user.id) {
-          return true;
-        } else if (findRecipe.UserId != user.id) {
-          return false;
-        }
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
     findMyRecipes: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
@@ -310,54 +246,9 @@ export const resolvers = {
         throw error;
       }
     },
-    login: async (_, args) => {
-      try {
-        const { email, password } = args;
-        if (!email) {
-          throw { name: "Email is required" };
-        }
-        if (!password) {
-          throw { name: "Password is required" };
-        }
-        const findUser = await User.findOne({ where: { email } });
-        if (!findUser) {
-          throw { name: "Invalid email/password" };
-        }
-        const checkPassword = comparePassword(password, findUser.password);
-        if (!checkPassword) {
-          throw { name: "Invalid email/password" };
-        }
-        const payload = {
-          id: findUser.id,
-        };
-        //   console.log(findUser);
-        const access_token = createToken(payload);
-
-        return { access_token };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
   },
   Mutation: {
     //! update untuk recipe saja
-    register: async (_, args) => {
-      try {
-        const { username, email, password, phoneNumber } = args.newUser;
-        const user = await User.create({
-          username,
-          email,
-          password,
-          phoneNumber,
-        });
-        const message = `user with email ${user.email} has been created`;
-        return { message };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
     createRecipe: async (_, args, contextValue) => {
       console.log(args, "iki loh");
       const t = await sequelize.transaction();
@@ -428,145 +319,6 @@ export const resolvers = {
         return { message };
       } catch (error) {
         await t.rollback();
-        console.log(error);
-        throw error;
-      }
-    },
-    createComment: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const { recipeId, message: commentMsg } = args;
-
-        const comment = {
-          message: commentMsg,
-          RecipeId: recipeId,
-          UserId: user.id,
-        };
-
-        const newComment = await Comment.create(comment);
-
-        const message = `Success create comment for recipe id ${recipeId}`;
-        return { message };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    createReaction: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const { recipeId, emoji, quantity } = args;
-
-        const reaction = {
-          emoji: emoji,
-          quantity: quantity,
-          RecipeId: recipeId,
-          UserId: user.id,
-        };
-
-        const newReaction = await Reaction.create(reaction);
-
-        const message = `Success create reaction for recipe with id ${recipeId}`;
-        return { message };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    createFavorite: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const { recipeId } = args;
-        const favorite = {
-          RecipeId: recipeId,
-          UserId: user.id,
-        };
-        const newFavorite = await Favorite.create(favorite);
-
-        const message = `Success adding recipe with id ${recipeId} to your favorite`;
-        return { message };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    deleteComment: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const { commentId } = args;
-
-        const findComment = await Comment.findByPk(commentId);
-
-        if (!findComment) throw { name: "NotFound" };
-
-        if (findComment.UserId != user.id) throw { name: "Not Authorized" };
-
-        const delComment = await Comment.destroy({ where: { id: commentId } });
-
-        const message = `successfully delete comment with id ${findComment.id}`;
-        return { message };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    deleteFavorite: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const { favoriteId } = args;
-        const findFavorite = await Favorite.findByPk(favoriteId);
-
-        if (!findFavorite) throw { name: "NotFound" };
-
-        if (findFavorite.UserId != user.id) throw { name: "Not Authorized" };
-
-        const delFavorite = await Favorite.destroy({
-          where: { id: favoriteId },
-        });
-
-        const message = `successfully delete favorite with id ${findFavorite.id}`;
-        return { message };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    deleteReaction: async (_, args, contextValue) => {
-      try {
-        if (!contextValue.access_token) throw { name: "InvalidToken" };
-
-        const user = await authentication(contextValue.access_token);
-
-        const { reactionId } = args;
-
-        const findReaction = await Reaction.findByPk(reactionId);
-
-        if (!findReaction) throw { name: "NotFound" };
-
-        if (findReaction.UserId != user.id) throw { name: "Not Authorized" };
-
-        const delReaction = await Reaction.destroy({
-          where: { id: reactionId },
-        });
-
-        const message = `successfully delete reaction with id ${findReaction.id}`;
-        return { message };
-      } catch (error) {
         console.log(error);
         throw error;
       }
