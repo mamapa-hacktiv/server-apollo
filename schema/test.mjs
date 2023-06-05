@@ -1,20 +1,12 @@
-
-import { config } from "dotenv"
+import { config } from "dotenv";
 if (process.env.NODE_ENV !== "production") {
-  config()
+  config();
 }
 import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
-import imagekit from '../helpers/imageUpload.js';
-import stream2buffer from '../helpers/streamToBuffer.js';
+import imagekit from "../helpers/imageUpload.js";
+import stream2buffer from "../helpers/streamToBuffer.js";
 import model from "../models/index.js";
-const { Reaction,
-  Recipe,
-  Ingredient,
-  Step,
-  Comment,
-  User,
-  Favorite,
-  sequelize, } = model
+const { Reaction, Recipe, Ingredient, Step, Comment, User, Favorite, sequelize } = model;
 import { createToken, decodeToken } from "../helpers/jwt.js";
 import { comparePassword } from "../helpers/bcrypt.js";
 import authentication from "../middlewares/authentication.js";
@@ -139,6 +131,16 @@ scalar Upload
     phoneNumber: String
   }
 
+  input updateRecipe {
+    title: String
+    image: String
+    description: String
+    videoUrl: String
+    origin: String
+    portion: Int
+    cookingTime: Int
+  }
+ 
   input newRecipe {
     title: String
     image: [Upload]
@@ -171,6 +173,7 @@ scalar Upload
   
   type Mutation {
     register(newUser: newUser): ResponseMessage
+    updateRecipe(id: ID!, input:updateRecipe): Recipes
     createRecipe(newRecipe: newRecipe): ResponseMessage
     createComment(recipeId: ID, message: String): ResponseMessage
     createReaction(recipeId: ID, emoji: String, quantity:Int): ResponseMessage
@@ -264,7 +267,6 @@ export const resolvers = {
         throw error;
       }
     },
-    //! tambahin findFavoritebyrecipedanuserid bailikin true false
     findMyRecipes: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
@@ -319,7 +321,6 @@ export const resolvers = {
     },
   },
   Mutation: {
-    //! update untuk recipe saja
     register: async (_, args) => {
       try {
         const { username, email, password, phoneNumber } = args.newUser;
@@ -329,11 +330,43 @@ export const resolvers = {
           password,
           phoneNumber,
         });
-        const message = `user with email ${user.email} has been created`
+        const message = `user with email ${user.email} has been created`;
         return { message };
       } catch (error) {
         console.log(error);
         throw error;
+      }
+    },
+    updateRecipe: async (_, { id, input }, contextValue) => {
+      try {
+        const { title, image, description, videoUrl, origin, portion, cookingTime } = input;
+
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const findRecipe = await Recipe.findByPk(id);
+        if (!findRecipe) throw { name: "NotFound" };
+
+        let updateRecipes = await Recipe.update(
+          {
+            title,
+            image,
+            description,
+            videoUrl,
+            origin,
+            portion,
+            cookingTime,
+          },
+          {
+            where: {
+              id,
+            },
+          }
+        );
+        return await findRecipe.reload();
+      } catch (error) {
+        console.log(error);
       }
     },
     createRecipe: async (_, args, contextValue) => {
@@ -341,30 +374,20 @@ export const resolvers = {
       const t = await sequelize.transaction();
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
-        const {
-          title,
-          image,
-          description,
-          videoUrl,
-          origin,
-          portion,
-          cookingTime,
-          steps,
-          ingredients,
-        } = args.newRecipe;
+        const { title, image, description, videoUrl, origin, portion, cookingTime, steps, ingredients } = args.newRecipe;
 
         const user = await authentication(contextValue.access_token);
 
         //! implement upload image
-        const result = await Promise.all(image)
-        const imagesBufferPromises = result.map(img => {
+        const result = await Promise.all(image);
+        const imagesBufferPromises = result.map((img) => {
           const stream = img.createReadStream();
           return stream2buffer(stream);
         });
         const imagesBuffer = await Promise.all(imagesBufferPromises);
         const data = await imagekit.upload({
           file: imagesBuffer[0],
-          fileName: result[0].filename
+          fileName: result[0].filename,
         });
 
         if (!title) throw { name: "Title is required" };
@@ -396,10 +419,7 @@ export const resolvers = {
           transaction: t,
         });
 
-        const newIngredients = await Ingredient.bulkCreate(
-          ingredientsWithRecipeId,
-          { transaction: t }
-        );
+        const newIngredients = await Ingredient.bulkCreate(ingredientsWithRecipeId, { transaction: t });
         await t.commit();
 
         const message = "Success add recipe";
@@ -566,4 +586,3 @@ export const resolvers = {
     },
   },
 };
-
