@@ -4,6 +4,7 @@ const { User } = model
 
 async function authentication(token) {
   let payload = decodeToken(token);
+
   const findUser = await User.findByPk(payload.id);
   if (!findUser) throw { name: "InvalidToken" };
   const user = {

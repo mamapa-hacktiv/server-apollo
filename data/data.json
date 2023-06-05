@@ -17,9 +17,9 @@
     {
       "id": 1,
       "title": "nasi goreng",
-      "image": "image.png",
+      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=872&q=80",
       "description": "Nasi goreng ayam suwir bisa membuat sarapanmu terasa istimewa. Sajikan dengan tambahan seperti telur mata sapi, acar mentimun, emping, dan sambal. Kita coba masak sendiri di rumah dengan resep ini, yuk! Nasi adalah salah satu makanan sisa yang banyak ditemukan di berbagai rumah tangga. Daripada dibuang langsung, membuat resep nasi goreng mudah ini sedikit banyak membantu kita menjaga bumi dan mengurangi food waste. Indonesia adalah negara kedua terbesar di dunia yang menyumbang food waste dan jumlahnya sangat besar. Sisa makanan berlebih ini sebetulnya bisa membantu kebutuhan pangan hingga 28 juta orang miskin di negeri ini! Nasi goreng dikenal sebagai menu mudah untuk dimasak. Bukan hanya bumbu, salah satu kunci kelezatan hidangan ini adalah tekstur nasi yang digunakan. Hidangan favorit ini cocoknya menggunakan nasi pera dan keras. Maka, dinginkan nasi putih di piring sekitar 30 menit sebelum mengolahnya. Untuk isian, kali ini kita menggunakan ayam suwir dan sosis. Tidak ada salahnya kamu menambahkan sayuran seperti wortel dan kacang polong ke dalam nasi goreng.",
-      "videoUrl": "video.youtube",
+      "videoUrl": "https://www.youtube.com/watch?v=SGBP3sG3a9Y",
       "origin": "boyolali, jawa tengah, indonesia",
       "portion": 3,
       "cookingTime": 1,
@@ -28,9 +28,9 @@
     {
       "id": 2,
       "title": "nasi bakar",
-      "image": "image.png",
+      "image": "https://images.unsplash.com/photo-1666239308046-ead0314ee0fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
       "description": "Nasi bakar ayam rejeng bisa membuat sarapanmu terasa istimewa. Sajikan dengan tambahan seperti telur mata sapi, acar mentimun, emping, dan sambal. Kita coba masak sendiri di rumah dengan resep ini, yuk! Nasi adalah salah satu makanan sisa yang banyak ditemukan di berbagai rumah tangga. Daripada dibuang langsung, membuat resep nasi goreng mudah ini sedikit banyak membantu kita menjaga bumi dan mengurangi food waste. Indonesia adalah negara kedua terbesar di dunia yang menyumbang food waste dan jumlahnya sangat besar. Sisa makanan berlebih ini sebetulnya bisa membantu kebutuhan pangan hingga 28 juta orang miskin di negeri ini! Nasi goreng dikenal sebagai menu mudah untuk dimasak. Bukan hanya bumbu, salah satu kunci kelezatan hidangan ini adalah tekstur nasi yang digunakan. Hidangan favorit ini cocoknya menggunakan nasi pera dan keras. Maka, dinginkan nasi putih di piring sekitar 30 menit sebelum mengolahnya. Untuk isian, kali ini kita menggunakan ayam suwir dan sosis. Tidak ada salahnya kamu menambahkan sayuran seperti wortel dan kacang polong ke dalam nasi goreng.",
-      "videoUrl": "video.youtube",
+      "videoUrl": "https://www.youtube.com/watch?v=BSjLH2yDZxk",
       "origin": "boyolali, jawa tengah, indonesia",
       "portion": 3,
       "cookingTime": 1,

@@ -14,7 +14,7 @@ const { Reaction,
   Comment,
   User,
   Favorite,
-  sequelize, } = model
+  sequelize } = model
 import { createToken, decodeToken } from "../helpers/jwt.js";
 import { comparePassword } from "../helpers/bcrypt.js";
 import authentication from "../middlewares/authentication.js";
@@ -148,12 +148,14 @@ scalar Upload
     portion:Int
     cookingTime:String
     steps: [newStep]
+    stepImages: [Upload]
     ingredients: [newIngredient]
   }
 
+  
+
   input newStep {
     instruction: String
-    image: [Upload]
   }
 
   input newIngredient {
@@ -166,12 +168,12 @@ scalar Upload
     findRecipes: [Recipes]
     findFavorite: [Favorite] 
     findMyRecipes: [Recipes]
-    login(email: String, password: String): LoginResponse
   }
   
   type Mutation {
     register(newUser: newUser): ResponseMessage
-    createRecipe(newRecipe: newRecipe): ResponseMessage
+    login(email: String, password: String): LoginResponse
+    createRecipe(newRecipe: newRecipe, test: [Upload]): ResponseMessage
     createComment(recipeId: ID, message: String): ResponseMessage
     createReaction(recipeId: ID, emoji: String, quantity:Int): ResponseMessage
     createFavorite(recipeId: ID): ResponseMessage
@@ -271,6 +273,7 @@ export const resolvers = {
 
         const user = await authentication(contextValue.access_token);
 
+
         const myRecipe = await Recipe.findAll({
           where: {
             UserId: user.id,
@@ -283,6 +286,26 @@ export const resolvers = {
         });
 
         return myRecipe;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+
+  },
+  Mutation: {
+    //! update untuk recipe saja
+    register: async (_, args) => {
+      try {
+        const { username, email, password, phoneNumber } = args.newUser;
+        const user = await User.create({
+          username,
+          email,
+          password,
+          phoneNumber,
+        });
+        const message = `user with email ${user.email} has been created`
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -317,27 +340,8 @@ export const resolvers = {
         throw error;
       }
     },
-  },
-  Mutation: {
-    //! update untuk recipe saja
-    register: async (_, args) => {
-      try {
-        const { username, email, password, phoneNumber } = args.newUser;
-        const user = await User.create({
-          username,
-          email,
-          password,
-          phoneNumber,
-        });
-        const message = `user with email ${user.email} has been created`
-        return { message };
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
     createRecipe: async (_, args, contextValue) => {
-      console.log(args, "iki loh");
+
       const t = await sequelize.transaction();
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
@@ -350,11 +354,13 @@ export const resolvers = {
           portion,
           cookingTime,
           steps,
+          stepImages,
           ingredients,
         } = args.newRecipe;
 
         const user = await authentication(contextValue.access_token);
-
+        console.log(args.upload, 'ini args.upload');
+        console.log(stepImages, image, 'ini gambar');
         //! implement upload image
         const result = await Promise.all(image)
         const imagesBufferPromises = result.map(img => {
@@ -366,6 +372,22 @@ export const resolvers = {
           file: imagesBuffer[0],
           fileName: result[0].filename
         });
+
+
+        //! implement upload image
+        const stepResult = await Promise.all(stepImages)
+        console.log(stepResult);
+        const stepImagesBufferPromises = stepResult.map(img => {
+          const stream = img.createReadStream();
+          return stream2buffer(stream);
+        });
+        const stepImagesBuffer = await Promise.all(stepImagesBufferPromises);
+        const stepData = await imagekit.upload({
+          file: stepImagesBuffer[0],
+          fileName: stepResult[0].filename
+        });
+
+        console.log(stepData);
 
         if (!title) throw { name: "Title is required" };
 
@@ -545,20 +567,16 @@ export const resolvers = {
     deleteRecipe: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
-
         const user = await authentication(contextValue.access_token);
-
         const { recipeId } = args;
-
         const findRecipe = await Recipe.findByPk(recipeId);
-
         if (!findRecipe) throw { name: "NotFound" };
-
         if (findRecipe.UserId != user.id) throw { name: "Not Authorized" };
-
+        await Ingredient.destroy({ where: { RecipeId: recipeId } })
+        await Step.destroy({ where: { RecipeId: recipeId } })
+        await Step.destroy({ where: { RecipeId: recipeId } })
         const delRecipe = await Recipe.destroy({ where: { id: recipeId } });
-
-        return `successfully delete recipe with id ${findRecipe.id}`;
+        return { message: `successfully delete recipe with id ${findRecipe.id}` }
       } catch (error) {
         console.log(error);
         throw error;
