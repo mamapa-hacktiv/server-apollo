@@ -267,7 +267,6 @@ export const resolvers = {
         throw error;
       }
     },
-    //! tambahin findFavoritebyrecipedanuserid bailikin true false
     findMyRecipes: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
@@ -322,8 +321,6 @@ export const resolvers = {
     },
   },
   Mutation: {
-    //! update untuk recipe saja
-
     register: async (_, args) => {
       try {
         const { username, email, password, phoneNumber } = args.newUser;
