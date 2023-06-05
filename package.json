@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --detectOpenHandles --verbose --forceExit --runInBand --coverage",
-    "start": "nodemon app.js"
+
+    "start": "node app.js",
+    "dev": "npx nodemon app.js"
+
   },
   "keywords": [],
   "author": "",
