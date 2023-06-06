@@ -93,13 +93,13 @@ export const favoriteResolvers = {
     isFavorite: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
-
+        console.log(args);
         const user = await authentication(contextValue.access_token);
-
+        console.log(user);
         const { recipeId } = args;
 
         const findRecipe = await Recipe.findByPk(recipeId);
-
+        console.log(findRecipe);
         if (!findRecipe) throw { name: "NotFound" };
 
         if (findRecipe.UserId == user.id) {

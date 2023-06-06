@@ -104,7 +104,7 @@ export const userResolvers = {
             messages: [{ "role": "system", "content": message }]
           },
           headers: {
-            Authorization: "Bearer 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"
+            Authorization: "Bearer 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"
           }
         });
         console.log(data);
