@@ -1,6 +1,6 @@
 "use strict";
-const { hashPassword } = require("../helpers/bcrypt");
 
+const { hashPassword } = require('../helpers/bcryptSeeding.cjs')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -14,6 +14,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Users", null, {});
+    await queryInterface.bulkDelete("Users", null, { truncate: true, cascade: true, restartIdentity: true });
   },
 };

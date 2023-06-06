@@ -14,29 +14,95 @@
     }
   ],
   "Recipes": [
-    {
-      "id": 1,
-      "title": "nasi goreng",
-      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=872&q=80",
-      "description": "Nasi goreng ayam suwir bisa membuat sarapanmu terasa istimewa. Sajikan dengan tambahan seperti telur mata sapi, acar mentimun, emping, dan sambal. Kita coba masak sendiri di rumah dengan resep ini, yuk! Nasi adalah salah satu makanan sisa yang banyak ditemukan di berbagai rumah tangga. Daripada dibuang langsung, membuat resep nasi goreng mudah ini sedikit banyak membantu kita menjaga bumi dan mengurangi food waste. Indonesia adalah negara kedua terbesar di dunia yang menyumbang food waste dan jumlahnya sangat besar. Sisa makanan berlebih ini sebetulnya bisa membantu kebutuhan pangan hingga 28 juta orang miskin di negeri ini! Nasi goreng dikenal sebagai menu mudah untuk dimasak. Bukan hanya bumbu, salah satu kunci kelezatan hidangan ini adalah tekstur nasi yang digunakan. Hidangan favorit ini cocoknya menggunakan nasi pera dan keras. Maka, dinginkan nasi putih di piring sekitar 30 menit sebelum mengolahnya. Untuk isian, kali ini kita menggunakan ayam suwir dan sosis. Tidak ada salahnya kamu menambahkan sayuran seperti wortel dan kacang polong ke dalam nasi goreng.",
-      "videoUrl": "https://www.youtube.com/watch?v=SGBP3sG3a9Y",
-      "origin": "boyolali, jawa tengah, indonesia",
-      "portion": 3,
-      "cookingTime": 1,
-      "UserId": 1
-    },
-    {
-      "id": 2,
-      "title": "nasi bakar",
-      "image": "https://images.unsplash.com/photo-1666239308046-ead0314ee0fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-      "description": "Nasi bakar ayam rejeng bisa membuat sarapanmu terasa istimewa. Sajikan dengan tambahan seperti telur mata sapi, acar mentimun, emping, dan sambal. Kita coba masak sendiri di rumah dengan resep ini, yuk! Nasi adalah salah satu makanan sisa yang banyak ditemukan di berbagai rumah tangga. Daripada dibuang langsung, membuat resep nasi goreng mudah ini sedikit banyak membantu kita menjaga bumi dan mengurangi food waste. Indonesia adalah negara kedua terbesar di dunia yang menyumbang food waste dan jumlahnya sangat besar. Sisa makanan berlebih ini sebetulnya bisa membantu kebutuhan pangan hingga 28 juta orang miskin di negeri ini! Nasi goreng dikenal sebagai menu mudah untuk dimasak. Bukan hanya bumbu, salah satu kunci kelezatan hidangan ini adalah tekstur nasi yang digunakan. Hidangan favorit ini cocoknya menggunakan nasi pera dan keras. Maka, dinginkan nasi putih di piring sekitar 30 menit sebelum mengolahnya. Untuk isian, kali ini kita menggunakan ayam suwir dan sosis. Tidak ada salahnya kamu menambahkan sayuran seperti wortel dan kacang polong ke dalam nasi goreng.",
-      "videoUrl": "https://www.youtube.com/watch?v=BSjLH2yDZxk",
-      "origin": "boyolali, jawa tengah, indonesia",
-      "portion": 3,
-      "cookingTime": 1,
-      "UserId": 2
-    }
-  ],
+      {
+        "id": 1,
+        "title": "Nasi Goreng",
+        "image": "https://i.ibb.co/PCSZqGY/nasi-goreng.png",
+        "description": "Nasi goreng adalah hidangan nasi yang digoreng dengan bumbu seperti bawang merah, bawang putih, dan kecap manis. Biasanya ditambahkan dengan daging, udang, atau sayuran.",
+        "videoUrl": "https://www.youtube.com/watch?v=8ZjtrOktGr0",
+        "origin": "indonesia",
+        "portion": 3,
+        "cookingTime": "35 menit",
+        "UserId": 1
+      },
+      {
+        "id": 2,
+        "title": "Rendang",
+        "image": "https://cdn0-production-images-kly.akamaized.net/z7DqxOTTKbOomrLS-LxdPqUgqFc=/1x112:1000x675/680x383/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3245094/original/043061400_1600750232-shutterstock_1786027046.jpg",
+        "description": "Rendang adalah masakan daging yang dimasak dalam bumbu rendang kaya rempah-rempah seperti serai, lengkuas, cabai, dan santan kelapa. Rendang memiliki rasa pedas, gurih, dan berempah.",
+        "videoUrl": "https://www.youtube.com/watch?v=VX0ox3uQHQc",
+        "origin": "Minangkabau, Sumatera Barat.",
+        "portion": 3,
+        "cookingTime": "15 menit",
+        "UserId": 2
+      },
+      {
+        "id": 3,
+        "title": "Soto Mie",
+        "image": "https://i.ibb.co/98wNVz6/soto-mie.png",
+        "description": "Soto adalah hidangan sup yang terbuat dari kaldu ayam, sapi, atau daging lainnya dengan tambahan rempah-rempah seperti serai, jahe, dan bawang putih. Soto biasanya disajikan dengan nasi, potongan daging, telur rebus, dan pelengkap seperti tauge, koya (serundeng), dan kerupuk.",
+        "videoUrl": "https://www.youtube.com/watch?v=oPS4WE4szfw",
+        "origin": "Pulau Jawa",
+        "portion": 4,
+        "cookingTime": "15 menit",
+        "UserId": 2
+      },
+      {
+        "id": 4,
+        "title": "Jengkol Sambel Teri",
+        "image": "https://i.ibb.co/fqs04n0/Jengkol-sambel-teri.png",
+        "description": "Jengkol sambel tri adalah hidangan Indonesia yang terdiri dari jengkol yang dimasak dengan bumbu sambal tri.",
+        "videoUrl": "https://www.youtube.com/watch?v=NxI9SUIRCzQ",
+        "origin": "indonesia",
+        "portion": 3,
+        "cookingTime": "15 menit",
+        "UserId": 2
+      },
+      {
+        "id": 5,
+        "title": "Tumis Kangkung",
+        "image": "https://i.ibb.co/S5fSdgg/Tumis-kangkung.png",
+        "description": "Tumis kangkung adalah hidangan Indonesia yang terkenal dan sangat populer. Kangkung merupakan sayuran hijau yang memiliki batang yang empuk dan daun yang renyah. Hidangan ini biasanya disajikan sebagai sayuran tumis",
+        "videoUrl": "https://www.youtube.com/watch?v=hevXi1zbKgI",
+        "origin": "indonesia",
+        "portion": 3,
+        "cookingTime": "15 menit",
+        "UserId": 2
+      },
+      {
+        "id": 6,
+        "title": "Ayam bakar",
+        "image": "https://www.masakapahariini.com/wp-content/uploads/2023/01/resep-ayam-bakar-kalasan.jpg",
+        "description": "Ayam bakar adalah hidangan khas Indonesia yang terkenal dan populer. Hidangan ini terdiri dari potongan ayam yang dimasak dengan cara dipanggang atau dibakar dengan bumbu dan rempah-rempah khas.",
+        "videoUrl": "https://www.youtube.com/watch?v=4Z19mKLvi84",
+        "origin": "indonesia",
+        "portion": 3,
+        "cookingTime": "20 menit",
+        "UserId": 2
+      },
+      {
+        "id": 7,
+        "title": "Gado-gado",
+        "image": "https://www.masakapahariini.com/wp-content/uploads/2019/01/gado-gado-MAHI.jpg",
+        "description": "Gado-gado adalah hidangan salad sayuran khas Indonesia yang segar dan lezat. Hidangan ini terdiri dari berbagai macam sayuran segar yang direbus atau direndam dalam air panas untuk menjaga kegaringan dan kecrunchy-an mereka. Beberapa sayuran yang umum digunakan dalam gado-gado antara lain mentimun, kacang panjang, tauge, kol, dan daun selada.",
+        "videoUrl": "https://www.youtube.com/watch?v=Jm1ThTdVgwo",
+        "origin": "Jawa Barat",
+        "portion": 3,
+        "cookingTime": "20 menit",
+        "UserId": 2
+      },
+      {
+        "id": 8,
+        "title": "Sate Madura",
+        "image": "https://wiratech.co.id/wp-content/uploads/2019/02/bumbu-sate-madura.jpg",
+        "description": "Sate Madura berasal dari Madura, sate Padang berasal dari Sumatera Barat, sate Maranggi berasal dari Purwakarta, Jawa Barat, dan setiap daerah memiliki variasi sate khasnya sendiri.",
+        "videoUrl": "https://www.youtube.com/watch?v=Vh__EYZzPwg",
+        "origin": "Madura",
+        "portion": 3,
+        "cookingTime": "30 menit",
+        "UserId": 2
+      }
+    ],
   "Comments": [
     {
       "message": "Wah makanannya sangat biasa saja",
@@ -56,20 +122,80 @@
       "UserId": 2
     },
     {
+      "RecipeId": 8,
+      "UserId": 2
+    },
+    {
+      "RecipeId": 7,
+      "UserId": 2
+    },
+    {
+      "RecipeId": 6,
+      "UserId": 2
+    },
+    {
       "RecipeId": 2,
       "UserId": 1
     }
   ],
   "Ingredients": [
-    {
-      "name": "membuat nasi goreng",
-      "RecipeId": 2
-    },
-    {
-      "name": "membuat nasi bakar tapi digoreng",
-      "RecipeId": 2
-    }
-  ],
+      {
+        "name": "2 piring nasi putih (sebaiknya nasi yang telah dingin semalam",
+        "RecipeId": 1
+      },
+      {
+        "name": "150 gram daging ayam (dipotong kecil-kecil)",
+        "RecipeId": 1
+      },
+      {
+        "name": "100 gram udang (boleh digunakan udang segar atau udang beku yang telah dikupas)",
+        "RecipeId": 1
+      },
+      {
+        "name": "2 butir telur (kocok lepas)",
+        "RecipeId": 1
+      },
+      {
+        "name": "3 siung bawang putih (cincang halus)",
+        "RecipeId": 1
+      },
+      {
+        "name": "2 batang daun bawang (iris tipis)",
+        "RecipeId": 1
+      },
+      {
+        "name": "1 batang wortel (potong dadu kecil)",
+        "RecipeId": 1
+      },
+      {
+        "name": "1 batang seledri (iris tipis)",
+        "RecipeId": 1
+      },
+      {
+        "name": "2 sendok makan kecap manis",
+        "RecipeId": 1
+      },
+      {
+        "name": "1 sendok makan saus tiram",
+        "RecipeId": 1
+      },
+      {
+        "name": "1 sendok makan saus cabai (opsional, jika ingin pedas",
+        "RecipeId": 1
+      },
+      {
+        "name": "Minyak goreng secukupnya",
+        "RecipeId": 1
+      },
+      {
+        "name": "Garam secukupnya",
+        "RecipeId": 1
+      },
+      {
+        "name": "Merica secukupnya",
+        "RecipeId": 1
+      }
+    ],
   "Steps": [
     {
       "instruction": "Step setep membuat nasgor",

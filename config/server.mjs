@@ -5,8 +5,19 @@ import express from "express";
 import http from "http";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { typeDefs, resolvers } from "../schema/test.mjs";
+// import { typeDefs, resolvers } from "../schema/test.mjs";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
+import { userResolvers, userTypeDefs } from "../schema/userSchema.mjs";
+import { recipeResolvers, recipeTypeDefs } from "../schema/recipeSchema.mjs";
+import { commentResolvers, commentTypeDefs } from "../schema/commentSchema.mjs";
+import {
+  favoriteResolvers,
+  favoriteTypeDefs,
+} from "../schema/favoriteSchema.mjs";
+import {
+  reactionResolvers,
+  reactionTypeDefs,
+} from "../schema/reactionSchema.mjs";
 
 export default async function initServer(port = 4000) {
   try {
@@ -15,10 +26,22 @@ export default async function initServer(port = 4000) {
 
     const server = new ApolloServer({
       csrfPrevention: false,
-      typeDefs,
-      resolvers,
+      typeDefs: [
+        userTypeDefs,
+        recipeTypeDefs,
+        commentTypeDefs,
+        reactionTypeDefs,
+        favoriteTypeDefs,
+      ],
+      resolvers: [
+        userResolvers,
+        recipeResolvers,
+        reactionResolvers,
+        commentResolvers,
+        favoriteResolvers,
+      ],
       plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-      uploads: false
+      uploads: false,
     });
     await server.start();
 
@@ -46,7 +69,7 @@ export default async function initServer(port = 4000) {
     const url = `http://localhost:${port}/`;
     return {
       server,
-      url
+      url,
     };
   } catch (error) {
     throw error;
