@@ -99,6 +99,8 @@ export const favoriteResolvers = {
 
         const findRecipe = await Recipe.findByPk(recipeId);
 
+        if (!findRecipe) throw { name: "NotFound" };
+
         if (findRecipe.UserId == user.id) {
           return true;
         } else if (findRecipe.UserId != user.id) {

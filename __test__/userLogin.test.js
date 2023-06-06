@@ -17,9 +17,9 @@ const {
 } = model;
 
 const queryData = {
-  query: `mutation Mutation($newUser: newUser) {
-    register(newUser: $newUser) {
-      message
+  query: `query Query($password: String, $email: String) {
+    login(password: $password, email: $email) {
+      access_token
     }
   }`,
 };
@@ -65,82 +65,69 @@ describe("user testing register", () => {
     await serverTest?.stop();
   });
 
-  it("should be success registering", async () => {
+  it("should be success login in", async () => {
     // send our request to the url of the test server
     queryData.variables = {
-      newUser: {
-        username: "Success testing",
-        email: "success@apollo.com",
-        password: "12345",
-      },
+      email: "testing@apollo.com",
+      password: "12345",
     };
     const response = await request(urlTest).post("/").send(queryData);
     expect(response.body.errors).toBeUndefined();
     expect(response.body.data).toBeInstanceOf(Object);
-    expect(response.body.data).toHaveProperty("register");
+    expect(response.body.data).toHaveProperty("login");
   });
-
-  it("should be fail registering due to unique constraint", async () => {
+  it("should be fail login in due to wrong email", async () => {
     queryData.variables = {
-      newUser: {
-        username: "Failed testing",
-        email: "testing@apollo.com",
-        password: "12345",
-      },
+      email: "testing23@apollo.com",
+      password: "12345",
     };
 
     const response = await request(urlTest).post("/").send(queryData);
-    expect(response.body.errors).toBeInstanceOf(Array);
-    expect(response.body.errors[0]).toHaveProperty("message");
-    expect(response.body.errors[0].message).toEqual("Email must be unique");
-  });
-  it("should be fail registering due to invalid email format", async () => {
-    queryData.variables = {
-      newUser: {
-        username: "Failed testing",
-        email: "testing@apollo",
-        password: "12345",
-      },
-    };
-
-    const response = await request(urlTest).post("/").send(queryData);
-    // console.log(response.body.errors);
+    // console.log(response.body, "<<<");
     expect(response.body.errors).toBeInstanceOf(Array);
     expect(response.body.errors[0]).toHaveProperty("message");
     expect(response.body.errors[0].message).toEqual(
-      "Validation error: Please enter a valid email address"
+      'Unexpected error value: { name: "Invalid email/password" }'
     );
   });
-  it("should be fail registering due to user doesnt send email", async () => {
+  it("should be fail login in due to wrong password", async () => {
     queryData.variables = {
-      newUser: {
-        username: "Failed testing",
-        password: "12345",
-      },
+      email: "testing2@apollo.com",
+      password: "123456789",
     };
 
     const response = await request(urlTest).post("/").send(queryData);
-    // console.log(response.body.errors);
+    // console.log(response.body, "<<<");
     expect(response.body.errors).toBeInstanceOf(Array);
     expect(response.body.errors[0]).toHaveProperty("message");
     expect(response.body.errors[0].message).toEqual(
-      "notNull Violation: Email is required"
+      'Unexpected error value: { name: "Invalid email/password" }'
     );
   });
-  it("should be fail registering due to user doesnt send password", async () => {
+  it("should be fail login in due to user don't send email", async () => {
     queryData.variables = {
-      newUser: {
-        username: "Failed testing",
-        email: "failed@apollo.com",
-      },
+      password: "123456789",
     };
 
     const response = await request(urlTest).post("/").send(queryData);
-    // console.log(response.body.errors);
+    // console.log(response.body, "<<<");
     expect(response.body.errors).toBeInstanceOf(Array);
     expect(response.body.errors[0]).toHaveProperty("message");
     expect(response.body.errors[0].message).toEqual(
-      "notNull Violation: Password is required"
+      'Unexpected error value: { name: "Email is required" }'
+    );
+  });
+  it("should be fail login in due to user don't send password", async () => {
+    queryData.variables = {
+      email: "testing2@apollo.com",
+    };
+
+    const response = await request(urlTest).post("/").send(queryData);
+    // console.log(response.body, "<<<");
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors[0]).toHaveProperty("message");
+    expect(response.body.errors[0].message).toEqual(
+      'Unexpected error value: { name: "Password is required" }'
     );
   });
 });
