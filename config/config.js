@@ -1,17 +1,18 @@
 export default {
   development: {
     username: "postgres",
-    password: "2000",
+    password: "postgres",
     database: "mamapa_DB",
     host: "localhost",
     dialect: "postgres",
   },
   test: {
-    username: "root",
-    password: null,
-    database: "database_test",
+    username: "postgres",
+    password: "postgres",
+    database: "mamapa_DB_Test",
     host: "127.0.0.1",
-    dialect: "mysql",
+    dialect: "postgres",
+   
   },
   production: {
     username: "root",

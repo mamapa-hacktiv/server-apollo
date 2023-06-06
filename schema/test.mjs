@@ -6,7 +6,17 @@ import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 import imagekit from "../helpers/imageUpload.js";
 import stream2buffer from "../helpers/streamToBuffer.js";
 import model from "../models/index.js";
-const { Reaction, Recipe, Ingredient, Step, Comment, User, Favorite, sequelize } = model;
+const {
+  Reaction,
+  Recipe,
+  Ingredient,
+  Step,
+  Comment,
+  User,
+  Favorite,
+  sequelize,
+} = model;
+
 import { createToken, decodeToken } from "../helpers/jwt.js";
 import { comparePassword } from "../helpers/bcrypt.js";
 import authentication from "../middlewares/authentication.js";
@@ -155,7 +165,7 @@ scalar Upload
 
   input newStep {
     instruction: String
-    image: [Upload]
+    image: String
   }
 
   input newIngredient {
@@ -169,6 +179,7 @@ scalar Upload
     findFavorite: [Favorite] 
     findMyRecipes: [Recipes]
     login(email: String, password: String): LoginResponse
+    isFavorite(recipeId: ID): Boolean
   }
   
   type Mutation {
@@ -267,6 +278,28 @@ export const resolvers = {
         throw error;
       }
     },
+    //! tambahin findFavoritebyrecipedanuserid bailikin true false
+    isFavorite: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const { recipeId } = args;
+
+        const findRecipe = await Recipe.findByPk(recipeId);
+
+        if (findRecipe.UserId == user.id) {
+          return true;
+        } else if (findRecipe.UserId != user.id) {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+
     findMyRecipes: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
@@ -436,16 +469,18 @@ export const resolvers = {
 
         const user = await authentication(contextValue.access_token);
 
-        const { recipeId, message } = args;
+        const { recipeId, message: commentMsg } = args;
 
         const comment = {
-          message: message,
+          message: commentMsg,
           RecipeId: recipeId,
           UserId: user.id,
         };
 
         const newComment = await Comment.create(comment);
-        return `Success create comment for recipe id ${recipeId}`;
+
+        const message = `Success create comment for recipe id ${recipeId}`;
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -468,7 +503,8 @@ export const resolvers = {
 
         const newReaction = await Reaction.create(reaction);
 
-        return `Success create reaction for recipe with id ${recipeId}`;
+        const message = `Success create reaction for recipe with id ${recipeId}`;
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -487,7 +523,8 @@ export const resolvers = {
         };
         const newFavorite = await Favorite.create(favorite);
 
-        return `Success adding recipe with id ${recipeId} to your favorite`;
+        const message = `Success adding recipe with id ${recipeId} to your favorite`;
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -509,7 +546,8 @@ export const resolvers = {
 
         const delComment = await Comment.destroy({ where: { id: commentId } });
 
-        return `successfully delete comment with id ${findComment.id}`;
+        const message = `successfully delete comment with id ${findComment.id}`;
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -522,7 +560,7 @@ export const resolvers = {
         const user = await authentication(contextValue.access_token);
 
         const { favoriteId } = args;
-        const findFavorite = await Favorite.findByPk();
+        const findFavorite = await Favorite.findByPk(favoriteId);
 
         if (!findFavorite) throw { name: "NotFound" };
 
@@ -532,7 +570,8 @@ export const resolvers = {
           where: { id: favoriteId },
         });
 
-        return `successfully delete favorite with id ${findFavorite.id}`;
+        const message = `successfully delete favorite with id ${findFavorite.id}`;
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -556,7 +595,8 @@ export const resolvers = {
           where: { id: reactionId },
         });
 
-        return `successfully delete reaction with id ${findReaction.id}`;
+        const message = `successfully delete reaction with id ${findReaction.id}`;
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
@@ -576,9 +616,14 @@ export const resolvers = {
 
         if (findRecipe.UserId != user.id) throw { name: "Not Authorized" };
 
+        await Step.destroy({ where: { RecipeId: recipeId } });
+
+        await Ingredient.destroy({ where: { RecipeId: recipeId } });
+
         const delRecipe = await Recipe.destroy({ where: { id: recipeId } });
 
-        return `successfully delete recipe with id ${findRecipe.id}`;
+        const message = `successfully delete recipe with id ${findRecipe.id}`;
+        return { message };
       } catch (error) {
         console.log(error);
         throw error;
