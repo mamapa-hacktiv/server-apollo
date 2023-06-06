@@ -160,6 +160,7 @@ scalar Upload
   
   type Mutation {
     createRecipe(newRecipe: newRecipe): ResponseMessage
+    # updateRecipe(newRecipe: newRecipe, recipeId: ID): Recipes
     deleteRecipe(recipeId: ID): ResponseMessage
   }
 `;
@@ -168,38 +169,36 @@ export const recipeResolvers = {
   Upload: GraphQLUpload,
   Query: {
     recipeSearch: async (_, args) => {
-      try {
-        const { title } = args;
-        const result = await Recipe.findAll({
-          where: {
-            title: {
-              [Op.iLike]: `%${title}%`,
-            },
+      // try {
+      const { title } = args;
+      const result = await Recipe.findAll({
+        where: {
+          title: {
+            [Op.iLike]: `%${title}%`,
           },
-        });
-        return result;
-      } catch (error) {
-        // console.log(error);
-        throw error;
-      }
+        },
+      });
+      return result;
+      // } catch (error) {
+      //   // console.log(error);
+      //   throw error;
+      // }
     },
     findRecipes: async () => {
-      try {
-        const allRecipe = await Recipe.findAll({
-          include: [
-            {
-              model: Reaction,
-            },
-          ],
-          order: [
-            ['id', 'DESC']
-          ]
-        });
-        return allRecipe;
-      } catch (error) {
-        // console.log(error);
-        return error;
-      }
+      // try {
+      const allRecipe = await Recipe.findAll({
+        include: [
+          {
+            model: Reaction,
+          },
+        ],
+        order: [["id", "DESC"]],
+      });
+      return allRecipe;
+      // } catch (error) {
+      //   // console.log(error);
+      //   return error;
+      // }
     },
     findRecipe: async (_, args) => {
       try {
@@ -220,11 +219,7 @@ export const recipeResolvers = {
         return findRecipe;
       } catch (error) {
         // console.log(error);
-        if (error.name == "NotFound") {
-          return { message: "Data not found" };
-        } else {
-          return { message: "Internal Server Error" };
-        }
+        throw error;
       }
     },
     findMyRecipes: async (_, args, contextValue) => {
@@ -327,6 +322,83 @@ export const recipeResolvers = {
         throw error;
       }
     },
+    // updateRecipe: async (_, args, contextValue) => {
+    //   try {
+    //     if (!contextValue.access_token) throw { name: "InvalidToken" };
+    //     const {
+    //       title,
+    //       image,
+    //       description,
+    //       videoUrl,
+    //       origin,
+    //       portion,
+    //       cookingTime,
+    //       steps,
+    //       ingredients,
+    //     } = args.newRecipe;
+
+    //     const { recipeId } = args;
+
+    //     const user = await authentication(contextValue.access_token);
+
+    //     const findRecipe = await Recipe.findByPk(recipeId);
+    //     if (!findRecipe) throw { name: "NotFound" };
+
+    //     //! implement upload image
+    //     const result = await Promise.all(image);
+    //     const imagesBufferPromises = result.map((img) => {
+    //       const stream = img.createReadStream();
+    //       return stream2buffer(stream);
+    //     });
+    //     const imagesBuffer = await Promise.all(imagesBufferPromises);
+    //     const data = await imagekit.upload({
+    //       file: imagesBuffer[0],
+    //       fileName: result[0].filename,
+    //     });
+
+    //     const recipe = {
+    //       title: title,
+    //       image: data.url,
+    //       description: description,
+    //       videoUrl: videoUrl,
+    //       origin: origin,
+    //       portion: portion,
+    //       cookingTime: cookingTime,
+    //       UserId: user.id,
+    //     };
+
+    //     const stepsWithRecipeId = steps.map((el) => ({
+    //       ...el,
+    //       RecipeId: recipeId,
+    //     }));
+
+    //     const ingredientsWithRecipeId = ingredients.map((el) => ({
+    //       ...el,
+    //       RecipeId: recipeId,
+    //     }));
+
+    //     await Ingredient.bulkCreate(ingredientsWithRecipeId, {
+    //       updateOnDuplicate: ["id", "name", "RecipeId"],
+    //     });
+
+    //     await Step.bulkCreate(stepsWithRecipeId, {
+    //       updateOnDuplicate: ["id", "instruction", "image", "RecipeId"],
+    //     });
+
+    //     let updateRecipes = await Recipe.update(recipe, {
+    //       where: {
+    //         id: recipeId,
+    //       },
+    //     });
+
+    //     const messages = ``;
+
+    //     return await findRecipe.reload();
+    //   } catch (error) {
+    //     console.log(error);
+    //     throw error;
+    //   }
+    // },
     deleteRecipe: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };

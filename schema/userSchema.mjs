@@ -70,21 +70,18 @@ scalar Upload
 export const userResolvers = {
   Upload: GraphQLUpload,
   Query: {
-
     getUser: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
 
         const user = await authentication(contextValue.access_token);
         const findUser = await User.findByPk(user.id);
-        if (!findUser) {
-          throw { name: "Not Found" };
-        }
+
         const foundUser = { ...findUser.dataValues };
         delete foundUser.password;
         delete foundUser.createdAt;
         delete foundUser.updatedAt;
-        return foundUser
+        return foundUser;
       } catch (error) {
         throw error;
       }
@@ -94,23 +91,24 @@ export const userResolvers = {
     //! update untuk recipe saja
     getAi: async (_, args) => {
       try {
-        const { message } = args
+        const { message } = args;
 
         const { data } = await axios({
-          method: 'post',
+          method: "post",
           url: "https://api.openai.com/v1/chat/completions",
           data: {
             model: "gpt-3.5-turbo",
-            messages: [{ "role": "system", "content": message }]
+            messages: [{ role: "system", content: message }],
           },
           headers: {
-            Authorization: "Bearer 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"
-          }
+            Authorization:
+              "Bearer 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",
+          },
         });
         console.log(data);
-        return data.choices[0].message
+        return data.choices[0].message;
       } catch (error) {
-        throw error
+        throw error;
       }
     },
     register: async (_, args) => {

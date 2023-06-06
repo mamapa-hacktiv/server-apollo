@@ -383,10 +383,49 @@ describe("user testing register", () => {
       .field("operations", JSON.stringify(queryCreateRecipe))
       .field("map", JSON.stringify({ 0: ["variables.newRecipe.image"] }))
       .attach("0", "./asset/unnamed.jpg");
-    console.log(response.body, "<<<");
+    // console.log(response.body, "<<<");
     expect(response.body.errors).toBeUndefined();
     expect(response.body.data).toBeInstanceOf(Object);
     expect(response.body.data).toHaveProperty("createRecipe");
+  });
+
+  it("should be failed createRecipe due to invalid token", async () => {
+    // send our request to the url of the test server
+    queryCreateRecipe.variables = {
+      newRecipe: {
+        videoUrl: null,
+        title: "Ayam goreng",
+        steps: [
+          {
+            instruction: null,
+            image: null,
+          },
+        ],
+        portion: null,
+        origin: null,
+        ingredients: [
+          {
+            name: null,
+          },
+        ],
+        description: null,
+        cookingTime: null,
+      },
+    };
+    const response = await request(urlTest)
+      .post("/")
+      //   .send(queryCreateRecipe)
+      .set({ access_token: createToken({ id: 3, email: "mail@potao.com" }) })
+      .set("apollo-require-preflight", "true")
+      .field("operations", JSON.stringify(queryCreateRecipe))
+      .field("map", JSON.stringify({ 0: ["variables.newRecipe.image"] }))
+      .attach("0", "./asset/unnamed.jpg");
+    // console.log(response.body.errors, "<<<");
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors[0]).toHaveProperty("message");
+    expect(response.body.errors[0].message).toEqual(
+      'Unexpected error value: { name: "InvalidToken" }'
+    );
   });
 
   it("should be failed createRecipe due to invalid token", async () => {
@@ -420,7 +459,7 @@ describe("user testing register", () => {
       .field("operations", JSON.stringify(queryCreateRecipe))
       .field("map", JSON.stringify({ 0: ["variables.newRecipe.image"] }))
       .attach("0", "./asset/unnamed.jpg");
-    console.log(response.body.errors, "<<<");
+    // console.log(response.body.errors, "<<<");
     expect(response.body.errors).toBeInstanceOf(Array);
     expect(response.body.errors[0]).toHaveProperty("message");
     expect(response.body.errors[0].message).toEqual("invalid signature");

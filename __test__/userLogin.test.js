@@ -5,6 +5,7 @@ if (process.env.NODE_ENV !== "production") {
   config();
 }
 import model from "../models/index.js";
+import { createToken } from "../helpers/jwt.js";
 const {
   Reaction,
   Recipe,
@@ -17,9 +18,30 @@ const {
 } = model;
 
 const queryData = {
-  query: `query Query($password: String, $email: String) {
-    login(password: $password, email: $email) {
+  query: `mutation Mutation($email: String, $password: String) {
+    login(email: $email, password: $password) {
       access_token
+    }
+  }`,
+};
+
+const queryChatGPT = {
+  query: `mutation Mutation($message: String) {
+    getAi(message: $message) {
+      content
+    }
+  }`,
+};
+
+const queryGetUser = {
+  query: `query Query {
+    getUser {
+      createdAt
+      email
+      id
+      phoneNumber
+      updatedAt
+      username
     }
   }`,
 };
@@ -128,6 +150,66 @@ describe("user testing register", () => {
     expect(response.body.errors[0]).toHaveProperty("message");
     expect(response.body.errors[0].message).toEqual(
       'Unexpected error value: { name: "Password is required" }'
+    );
+  });
+
+  it("should be fetchChatGPT", async () => {
+    // send our request to the url of the test server
+    queryChatGPT.variables = {
+      message: "Say hello",
+    };
+    const response = await request(urlTest).post("/").send(queryChatGPT);
+    expect(response.body.errors).toBeUndefined();
+    expect(response.body.data).toBeInstanceOf(Object);
+    expect(response.body.data).toHaveProperty("getAi");
+  });
+  it("should be fail fetchChatGPT due to user don't send message", async () => {
+    queryChatGPT.variables = {
+      message: null,
+    };
+
+    const response = await request(urlTest).post("/").send(queryChatGPT);
+    // console.log(response.body, "<<<");
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors[0]).toHaveProperty("message");
+    expect(response.body.errors[0].message).toEqual(
+      "Request failed with status code 400"
+    );
+  });
+  it("should be success fetchUser", async () => {
+    // send our request to the url of the test server
+
+    const response = await request(urlTest)
+      .post("/")
+      .send(queryGetUser)
+      .set({
+        access_token: createToken({ id: 1, email: "testing@apollo.com" }),
+      });
+    expect(response.body.errors).toBeUndefined();
+    expect(response.body.data).toBeInstanceOf(Object);
+    expect(response.body.data).toHaveProperty("getUser");
+  });
+  it("should be fail fetch due to user don't send email", async () => {
+    const response = await request(urlTest).post("/").send(queryGetUser);
+    // console.log(response.body, "<<<");
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors[0]).toHaveProperty("message");
+    expect(response.body.errors[0].message).toEqual(
+      'Unexpected error value: { name: "InvalidToken" }'
+    );
+  });
+  it("should be fail fetch due to user don't send email", async () => {
+    const response = await request(urlTest)
+      .post("/")
+      .send(queryGetUser)
+      .set({
+        access_token: createToken({ id: 3, email: "testing@apollo.com" }),
+      });
+    console.log(response.body, "<<<");
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors[0]).toHaveProperty("message");
+    expect(response.body.errors[0].message).toEqual(
+      'Unexpected error value: { name: "InvalidToken" }'
     );
   });
 });
