@@ -12,6 +12,7 @@ export default {
     database: "mamapa_DB_Test",
     host: "127.0.0.1",
     dialect: "postgres",
+   
   },
   production: {
     username: "root",

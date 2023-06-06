@@ -16,6 +16,7 @@ const {
   Favorite,
   sequelize,
 } = model;
+
 import { createToken, decodeToken } from "../helpers/jwt.js";
 import { comparePassword } from "../helpers/bcrypt.js";
 import authentication from "../middlewares/authentication.js";
@@ -140,6 +141,16 @@ scalar Upload
     phoneNumber: String
   }
 
+  input updateRecipe {
+    title: String
+    image: String
+    description: String
+    videoUrl: String
+    origin: String
+    portion: Int
+    cookingTime: Int
+  }
+ 
   input newRecipe {
     title: String
     image: [Upload]
@@ -173,6 +184,7 @@ scalar Upload
   
   type Mutation {
     register(newUser: newUser): ResponseMessage
+    updateRecipe(id: ID!, input:updateRecipe): Recipes
     createRecipe(newRecipe: newRecipe): ResponseMessage
     createComment(recipeId: ID, message: String): ResponseMessage
     createReaction(recipeId: ID, emoji: String, quantity:Int): ResponseMessage
@@ -287,6 +299,7 @@ export const resolvers = {
         throw error;
       }
     },
+
     findMyRecipes: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
@@ -341,7 +354,6 @@ export const resolvers = {
     },
   },
   Mutation: {
-    //! update untuk recipe saja
     register: async (_, args) => {
       try {
         const { username, email, password, phoneNumber } = args.newUser;
@@ -358,22 +370,44 @@ export const resolvers = {
         throw error;
       }
     },
+    updateRecipe: async (_, { id, input }, contextValue) => {
+      try {
+        const { title, image, description, videoUrl, origin, portion, cookingTime } = input;
+
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+
+        const user = await authentication(contextValue.access_token);
+
+        const findRecipe = await Recipe.findByPk(id);
+        if (!findRecipe) throw { name: "NotFound" };
+
+        let updateRecipes = await Recipe.update(
+          {
+            title,
+            image,
+            description,
+            videoUrl,
+            origin,
+            portion,
+            cookingTime,
+          },
+          {
+            where: {
+              id,
+            },
+          }
+        );
+        return await findRecipe.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     createRecipe: async (_, args, contextValue) => {
       console.log(args, "iki loh");
       const t = await sequelize.transaction();
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
-        const {
-          title,
-          image,
-          description,
-          videoUrl,
-          origin,
-          portion,
-          cookingTime,
-          steps,
-          ingredients,
-        } = args.newRecipe;
+        const { title, image, description, videoUrl, origin, portion, cookingTime, steps, ingredients } = args.newRecipe;
 
         const user = await authentication(contextValue.access_token);
 
@@ -418,10 +452,7 @@ export const resolvers = {
           transaction: t,
         });
 
-        const newIngredients = await Ingredient.bulkCreate(
-          ingredientsWithRecipeId,
-          { transaction: t }
-        );
+        const newIngredients = await Ingredient.bulkCreate(ingredientsWithRecipeId, { transaction: t });
         await t.commit();
 
         const message = "Success add recipe";
