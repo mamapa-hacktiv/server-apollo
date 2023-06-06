@@ -179,7 +179,8 @@ export const recipeResolvers = {
         });
         return result;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
+        throw error;
       }
     },
     findRecipes: async () => {
@@ -196,7 +197,7 @@ export const recipeResolvers = {
         });
         return allRecipe;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         return error;
       }
     },
@@ -218,7 +219,7 @@ export const recipeResolvers = {
         if (!findRecipe) throw { name: "NotFound" };
         return findRecipe;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         if (error.name == "NotFound") {
           return { message: "Data not found" };
         } else {
@@ -245,7 +246,7 @@ export const recipeResolvers = {
 
         return myRecipe;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw error;
       }
     },
@@ -343,6 +344,10 @@ export const recipeResolvers = {
         await Step.destroy({ where: { RecipeId: recipeId } });
 
         await Ingredient.destroy({ where: { RecipeId: recipeId } });
+
+        await Comment.destroy({ where: { RecipeId: recipeId } });
+
+        await Favorite.destroy({ where: { RecipeId: recipeId } });
 
         const delRecipe = await Recipe.destroy({ where: { id: recipeId } });
 

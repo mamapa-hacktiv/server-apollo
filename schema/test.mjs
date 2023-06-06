@@ -16,6 +16,7 @@ const {
   Favorite,
   sequelize,
 } = model;
+
 import { createToken, decodeToken } from "../helpers/jwt.js";
 import { comparePassword } from "../helpers/bcrypt.js";
 import authentication from "../middlewares/authentication.js";
@@ -301,6 +302,7 @@ export const resolvers = {
         throw error;
       }
     },
+
     findMyRecipes: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
