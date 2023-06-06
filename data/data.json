@@ -1,225 +1,799 @@
 {
-  "Users": [
-    {
-      "username": "marsh",
-      "email": "marsh@potao.com",
-      "password": "123456",
-      "phoneNumber": "082135204098"
-    },
-    {
-      "username": "bunny",
-      "email": "test@gmail.com",
-      "password": "12345",
-      "phoneNumber": "082135204098"
-    }
-  ],
-  "Recipes": [
+    "Users": [
       {
-        "id": 1,
-        "title": "Nasi Goreng",
-        "image": "https://i.ibb.co/PCSZqGY/nasi-goreng.png",
-        "description": "Nasi goreng adalah hidangan nasi yang digoreng dengan bumbu seperti bawang merah, bawang putih, dan kecap manis. Biasanya ditambahkan dengan daging, udang, atau sayuran.",
-        "videoUrl": "https://www.youtube.com/watch?v=8ZjtrOktGr0",
-        "origin": "indonesia",
-        "portion": 3,
-        "cookingTime": "35 menit",
+        "username": "Fachri Hawari",
+        "email": "marsh@potao.com",
+        "password": "123456",
+        "phoneNumber": "082135204098"
+      },
+      {
+        "username": "Hary Dhimas",
+        "email": "test@gmail.com",
+        "password": "12345",
+        "phoneNumber": "082135204098"
+      }
+    ],
+    "Recipes": [
+        {
+          "id": 1,
+          "title": "Nasi Goreng",
+          "image": "https://i.ibb.co/djryJgH/nasi-Goreng.png",
+          "description": "Nasi goreng adalah hidangan nasi yang digoreng dengan bumbu seperti bawang merah, bawang putih, dan kecap manis. Biasanya ditambahkan dengan daging, udang, atau sayuran.",
+          "videoUrl": "https://www.youtube.com/watch?v=8ZjtrOktGr0",
+          "origin": "indonesia",
+          "portion": 3,
+          "cookingTime": "35 menit",
+          "UserId": 1
+        },
+        {
+          "id": 2,
+          "title": "Rendang",
+          "image": "https://cdn0-production-images-kly.akamaized.net/z7DqxOTTKbOomrLS-LxdPqUgqFc=/1x112:1000x675/680x383/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3245094/original/043061400_1600750232-shutterstock_1786027046.jpg",
+          "description": "Rendang adalah masakan daging yang dimasak dalam bumbu rendang kaya rempah-rempah seperti serai, lengkuas, cabai, dan santan kelapa. Rendang memiliki rasa pedas, gurih, dan berempah.",
+          "videoUrl": "https://www.youtube.com/watch?v=VX0ox3uQHQc",
+          "origin": "Minangkabau, Sumatera Barat.",
+          "portion": 3,
+          "cookingTime": "15 menit",
+          "UserId": 2
+        },
+        {
+          "id": 3,
+          "title": "Soto Mie",
+          "image": "https://i.ibb.co/JFN8QPY/sotoMie.png",
+          "description": "Soto adalah hidangan sup yang terbuat dari kaldu ayam, sapi, atau daging lainnya dengan tambahan rempah-rempah seperti serai, jahe, dan bawang putih. Soto biasanya disajikan dengan nasi, potongan daging, telur rebus, dan pelengkap seperti tauge, koya (serundeng), dan kerupuk.",
+          "videoUrl": "https://www.youtube.com/watch?v=oPS4WE4szfw",
+          "origin": "Pulau Jawa",
+          "portion": 4,
+          "cookingTime": "15 menit",
+          "UserId": 2
+        },
+        {
+          "id": 4,
+          "title": "Jengkol Sambel Teri",
+          "image": "https://i.ibb.co/7nysnNq/jengkol.png",
+          "description": "Jengkol sambel tri adalah hidangan Indonesia yang terdiri dari jengkol yang dimasak dengan bumbu sambal tri.",
+          "videoUrl": "https://www.youtube.com/watch?v=NxI9SUIRCzQ",
+          "origin": "indonesia",
+          "portion": 3,
+          "cookingTime": "15 menit",
+          "UserId": 2
+        },
+        {
+          "id": 5,
+          "title": "Tumis Kangkung",
+          "image": "https://i.ibb.co/1LxZvgb/kangkung.png",
+          "description": "Tumis kangkung adalah hidangan Indonesia yang terkenal dan sangat populer. Kangkung merupakan sayuran hijau yang memiliki batang yang empuk dan daun yang renyah. Hidangan ini biasanya disajikan sebagai sayuran tumis",
+          "videoUrl": "https://www.youtube.com/watch?v=hevXi1zbKgI",
+          "origin": "indonesia",
+          "portion": 3,
+          "cookingTime": "15 menit",
+          "UserId": 2
+        },
+        {
+          "id": 6,
+          "title": "Ayam bakar",
+          "image": "https://www.masakapahariini.com/wp-content/uploads/2023/01/resep-ayam-bakar-kalasan.jpg",
+          "description": "Ayam bakar adalah hidangan khas Indonesia yang terkenal dan populer. Hidangan ini terdiri dari potongan ayam yang dimasak dengan cara dipanggang atau dibakar dengan bumbu dan rempah-rempah khas.",
+          "videoUrl": "https://www.youtube.com/watch?v=4Z19mKLvi84",
+          "origin": "indonesia",
+          "portion": 3,
+          "cookingTime": "20 menit",
+          "UserId": 2
+        },
+        {
+          "id": 7,
+          "title": "Gado-gado",
+          "image": "https://www.masakapahariini.com/wp-content/uploads/2019/01/gado-gado-MAHI.jpg",
+          "description": "Gado-gado adalah hidangan salad sayuran khas Indonesia yang segar dan lezat. Hidangan ini terdiri dari berbagai macam sayuran segar yang direbus atau direndam dalam air panas untuk menjaga kegaringan dan kecrunchy-an mereka. Beberapa sayuran yang umum digunakan dalam gado-gado antara lain mentimun, kacang panjang, tauge, kol, dan daun selada.",
+          "videoUrl": "https://www.youtube.com/watch?v=Jm1ThTdVgwo",
+          "origin": "Jawa Barat",
+          "portion": 3,
+          "cookingTime": "20 menit",
+          "UserId": 2
+        },
+        {
+          "id": 8,
+          "title": "Sate Madura",
+          "image": "https://wiratech.co.id/wp-content/uploads/2019/02/bumbu-sate-madura.jpg",
+          "description": "Sate Madura berasal dari Madura, sate Padang berasal dari Sumatera Barat, sate Maranggi berasal dari Purwakarta, Jawa Barat, dan setiap daerah memiliki variasi sate khasnya sendiri.",
+          "videoUrl": "https://www.youtube.com/watch?v=Vh__EYZzPwg",
+          "origin": "Madura",
+          "portion": 3,
+          "cookingTime": "30 menit",
+          "UserId": 2
+        }
+      ],
+    "Comments": [
+      {
+        "message": "Resepnya sangat membantu kak",
+        "RecipeId": 1,
         "UserId": 1
       },
       {
-        "id": 2,
-        "title": "Rendang",
-        "image": "https://cdn0-production-images-kly.akamaized.net/z7DqxOTTKbOomrLS-LxdPqUgqFc=/1x112:1000x675/680x383/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3245094/original/043061400_1600750232-shutterstock_1786027046.jpg",
-        "description": "Rendang adalah masakan daging yang dimasak dalam bumbu rendang kaya rempah-rempah seperti serai, lengkuas, cabai, dan santan kelapa. Rendang memiliki rasa pedas, gurih, dan berempah.",
-        "videoUrl": "https://www.youtube.com/watch?v=VX0ox3uQHQc",
-        "origin": "Minangkabau, Sumatera Barat.",
-        "portion": 3,
-        "cookingTime": "15 menit",
+        "message": "Mudah ditiru bermanfaat ",
+        "RecipeId": 1,
         "UserId": 2
       },
       {
-        "id": 3,
-        "title": "Soto Mie",
-        "image": "https://i.ibb.co/98wNVz6/soto-mie.png",
-        "description": "Soto adalah hidangan sup yang terbuat dari kaldu ayam, sapi, atau daging lainnya dengan tambahan rempah-rempah seperti serai, jahe, dan bawang putih. Soto biasanya disajikan dengan nasi, potongan daging, telur rebus, dan pelengkap seperti tauge, koya (serundeng), dan kerupuk.",
-        "videoUrl": "https://www.youtube.com/watch?v=oPS4WE4szfw",
-        "origin": "Pulau Jawa",
-        "portion": 4,
-        "cookingTime": "15 menit",
-        "UserId": 2
-      },
-      {
-        "id": 4,
-        "title": "Jengkol Sambel Teri",
-        "image": "https://i.ibb.co/fqs04n0/Jengkol-sambel-teri.png",
-        "description": "Jengkol sambel tri adalah hidangan Indonesia yang terdiri dari jengkol yang dimasak dengan bumbu sambal tri.",
-        "videoUrl": "https://www.youtube.com/watch?v=NxI9SUIRCzQ",
-        "origin": "indonesia",
-        "portion": 3,
-        "cookingTime": "15 menit",
-        "UserId": 2
-      },
-      {
-        "id": 5,
-        "title": "Tumis Kangkung",
-        "image": "https://i.ibb.co/S5fSdgg/Tumis-kangkung.png",
-        "description": "Tumis kangkung adalah hidangan Indonesia yang terkenal dan sangat populer. Kangkung merupakan sayuran hijau yang memiliki batang yang empuk dan daun yang renyah. Hidangan ini biasanya disajikan sebagai sayuran tumis",
-        "videoUrl": "https://www.youtube.com/watch?v=hevXi1zbKgI",
-        "origin": "indonesia",
-        "portion": 3,
-        "cookingTime": "15 menit",
-        "UserId": 2
-      },
-      {
-        "id": 6,
-        "title": "Ayam bakar",
-        "image": "https://www.masakapahariini.com/wp-content/uploads/2023/01/resep-ayam-bakar-kalasan.jpg",
-        "description": "Ayam bakar adalah hidangan khas Indonesia yang terkenal dan populer. Hidangan ini terdiri dari potongan ayam yang dimasak dengan cara dipanggang atau dibakar dengan bumbu dan rempah-rempah khas.",
-        "videoUrl": "https://www.youtube.com/watch?v=4Z19mKLvi84",
-        "origin": "indonesia",
-        "portion": 3,
-        "cookingTime": "20 menit",
-        "UserId": 2
-      },
-      {
-        "id": 7,
-        "title": "Gado-gado",
-        "image": "https://www.masakapahariini.com/wp-content/uploads/2019/01/gado-gado-MAHI.jpg",
-        "description": "Gado-gado adalah hidangan salad sayuran khas Indonesia yang segar dan lezat. Hidangan ini terdiri dari berbagai macam sayuran segar yang direbus atau direndam dalam air panas untuk menjaga kegaringan dan kecrunchy-an mereka. Beberapa sayuran yang umum digunakan dalam gado-gado antara lain mentimun, kacang panjang, tauge, kol, dan daun selada.",
-        "videoUrl": "https://www.youtube.com/watch?v=Jm1ThTdVgwo",
-        "origin": "Jawa Barat",
-        "portion": 3,
-        "cookingTime": "20 menit",
-        "UserId": 2
-      },
-      {
-        "id": 8,
-        "title": "Sate Madura",
-        "image": "https://wiratech.co.id/wp-content/uploads/2019/02/bumbu-sate-madura.jpg",
-        "description": "Sate Madura berasal dari Madura, sate Padang berasal dari Sumatera Barat, sate Maranggi berasal dari Purwakarta, Jawa Barat, dan setiap daerah memiliki variasi sate khasnya sendiri.",
-        "videoUrl": "https://www.youtube.com/watch?v=Vh__EYZzPwg",
-        "origin": "Madura",
-        "portion": 3,
-        "cookingTime": "30 menit",
+        "message": "Terimakasih ka step nya sangat membantu",
+        "RecipeId": 1,
         "UserId": 2
       }
     ],
-  "Comments": [
-    {
-      "message": "Wah makanannya sangat biasa saja",
-      "RecipeId": 1,
-      "UserId": 1
-    },
-    {
-      "message": "Wah makanannya sangat amazing",
-      "RecipeId": 2,
-      "UserId": 2
-    }
-  ],
-
-  "Favorites": [
-    {
-      "RecipeId": 1,
-      "UserId": 2
-    },
-    {
-      "RecipeId": 8,
-      "UserId": 2
-    },
-    {
-      "RecipeId": 7,
-      "UserId": 2
-    },
-    {
-      "RecipeId": 6,
-      "UserId": 2
-    },
-    {
-      "RecipeId": 2,
-      "UserId": 1
-    }
-  ],
-  "Ingredients": [
+  
+    "Favorites": [
       {
-        "name": "2 piring nasi putih (sebaiknya nasi yang telah dingin semalam",
+        "RecipeId": 1,
+        "UserId": 2
+      },
+      {
+        "RecipeId": 2,
+        "UserId": 1
+      }
+    ],
+    "Ingredients": [
+      {
+        "name": "Nasi yang sudah didinginkan",
         "RecipeId": 1
       },
       {
-        "name": "150 gram daging ayam (dipotong kecil-kecil)",
+        "name": "Blue band (minyak goreng)",
         "RecipeId": 1
       },
       {
-        "name": "100 gram udang (boleh digunakan udang segar atau udang beku yang telah dikupas)",
+        "name": "2 butir Telur",
         "RecipeId": 1
       },
       {
-        "name": "2 butir telur (kocok lepas)",
+        "name": "5 siung Bawang merah",
         "RecipeId": 1
       },
       {
-        "name": "3 siung bawang putih (cincang halus)",
+        "name": "2 siung Bawang putih",
         "RecipeId": 1
       },
       {
-        "name": "2 batang daun bawang (iris tipis)",
+        "name": "1 buah Wortel",
         "RecipeId": 1
       },
       {
-        "name": "1 batang wortel (potong dadu kecil)",
+        "name": "secukupnya Kol",
         "RecipeId": 1
       },
       {
-        "name": "1 batang seledri (iris tipis)",
+        "name": "1 bonggol Sawi",
         "RecipeId": 1
       },
       {
-        "name": "2 sendok makan kecap manis",
+        "name": "1 batang B. Pre",
         "RecipeId": 1
       },
       {
-        "name": "1 sendok makan saus tiram",
+        "name": "5 biji Cabe rawit merah",
         "RecipeId": 1
       },
       {
-        "name": "1 sendok makan saus cabai (opsional, jika ingin pedas",
+        "name": "2 biji Cabe keriting",
         "RecipeId": 1
       },
       {
-        "name": "Minyak goreng secukupnya",
+        "name": "Ayam (kalau ada)",
         "RecipeId": 1
+      },
+      {
+        "name": "Sosis+nugget (kalau ada)",
+        "RecipeId": 1
+      },
+      {
+        "name": "3 biji Bakso",
+        "RecipeId": 1
+      },
+      {
+        "name": "Kaldu ayam",
+        "RecipeId": 1
+      },
+      {
+        "name": "Gula",
+        "RecipeId": 1
+      },
+      {
+        "name": "Garam",
+        "RecipeId": 1
+      },
+      {
+        "name": "500 gram daging sapi (potong menjadi potongan kecil)",
+        "RecipeId": 2
+      },
+      {
+        "name": "3 lembar daun jeruk",
+        "RecipeId": 2
+      },
+      {
+        "name": "2 batang serai (memarkan)",
+        "RecipeId": 2
+      },
+      {
+        "name": "4 cm lengkuas (memarkan)",
+        "RecipeId": 2
+      },
+      {
+        "name": "5 lembar daun kunyit",
+        "RecipeId": 2
+      },
+      {
+        "name": "2 lembar daun pandan",
+        "RecipeId": 2
+      },
+      {
+        "name": "600 ml santan kental",
+        "RecipeId": 2
+      },
+      {
+        "name": "300 ml air",
+        "RecipeId": 2
+      },
+      {
+        "name": "3 sdm minyak goreng",
+        "RecipeId": 2
+      },
+      {
+        "name": "2 sdm gula merah, sisir halus",
+        "RecipeId": 2
       },
       {
         "name": "Garam secukupnya",
-        "RecipeId": 1
+        "RecipeId": 2
+      },
+      {
+        "name": "200 gram mie kuning (rebus hingga matang)",
+        "RecipeId": 3
+      },
+      {
+        "name": "200 gram daging ayam (dipotong dadu)",
+        "RecipeId": 3
+      },
+      {
+        "name": "1 liter kaldu ayam",
+        "RecipeId": 3
+      },
+      {
+        "name": "2 batang daun bawang (iris tipis)",
+        "RecipeId": 3
+      },
+      {
+        "name": "2 batang seledri (iris tipis)",
+        "RecipeId": 3
+      },
+      {
+        "name": "1 batang daun seledri (iris tipis)",
+        "RecipeId": 3
+      },
+      {
+        "name": "100 gram tauge (seduh dengan air panas)",
+        "RecipeId": 3
+      },
+      {
+        "name": "2 butir telur (rebus)",
+        "RecipeId": 3
+      },
+      {
+        "name": "2 siung bawang putih (haluskan)",
+        "RecipeId": 3
+      },
+      {
+        "name": "1 cm jahe (haluskan)",
+        "RecipeId": 3
+      },
+      {
+        "name": "1 sdm minyak goreng",
+        "RecipeId": 3
+      },
+      {
+        "name": "1 sdm kecap manis",
+        "RecipeId": 3
+      },
+      {
+        "name": "Garam secukupnya",
+        "RecipeId": 3
       },
       {
         "name": "Merica secukupnya",
-        "RecipeId": 1
+        "RecipeId": 3
+      },
+      {
+        "name": "Bawang merah goreng (untuk taburan)",
+        "RecipeId": 3
+      },
+      {
+        "name": "250 gram jengkol (direbus hingga empuk, kemudian iris tipis)",
+        "RecipeId": 4
+      },
+      {
+        "name": "100 gram teri nasi (goreng)",
+        "RecipeId": 4
+      },
+      {
+        "name": "5 buah cabai merah besar (haluskan)",
+        "RecipeId": 4
+      },
+      {
+        "name": "3 siung bawang putih (haluskan)",
+        "RecipeId": 4
+      },
+      {
+        "name": "2 butir bawang merah (haluskan)",
+        "RecipeId": 4
+      },
+      {
+        "name": "1 buah tomat (potong dadu)",
+        "RecipeId": 4
+      },
+      {
+        "name": "1 lembar daun salam",
+        "RecipeId": 4
+      },
+      {
+        "name": "1 batang serai (geprek)",
+        "RecipeId": 4
+      },
+      {
+        "name": "1 cm lengkuas (geprek)",
+        "RecipeId": 4
+      },
+      {
+        "name": "1 sdm gula merah",
+        "RecipeId": 4
+      },
+      {
+        "name": "Garam secukupnya",
+        "RecipeId": 4
+      },
+      {
+        "name": "Minyak goreng secukupnya",
+        "RecipeId": 4
+      },
+      {
+        "name": "Air secukupnya",
+        "RecipeId": 4
+      },
+      {
+        "name": "300 gram kangkung (siangi dan potong-potong)",
+        "RecipeId": 5
+      },
+      {
+        "name": "100 gram daging ayam (potong dadu kecil)",
+        "RecipeId": 5
+      },
+      {
+        "name": "3 siung bawang putih (cincang halus)",
+        "RecipeId": 5
+      },
+      {
+        "name": "2 siung bawang merah (cincang halus)",
+        "RecipeId": 5
+      },
+      {
+        "name": "2 buah cabai merah besar (iris serong)",
+        "RecipeId": 5
+      },
+      {
+        "name": "1 buah cabai rawit merah (iris serong)",
+        "RecipeId": 5
+      },
+      {
+        "name": "1/2 sendok teh terasi (bakar)",
+        "RecipeId": 5
+      },
+      {
+        "name": "1 sendok makan kecap manis",
+        "RecipeId": 5
+      },
+      {
+        "name": "Garam secukupnya",
+        "RecipeId": 5
+      },
+      {
+        "name": "Merica secukupnya",
+        "RecipeId": 5
+      },
+      {
+        "name": "Minyak goreng secukupnya",
+        "RecipeId": 5
+      },
+      {
+        "name": "1 ekor ayam, potong menjadi beberapa bagian",
+        "RecipeId": 6
+      },
+      {
+        "name": "3 siung bawang putih, haluskan",
+        "RecipeId": 6
+      },
+      {
+        "name": "2 cm jahe, haluskan",
+        "RecipeId": 6
+      },
+      {
+        "name": "2 sendok makan kecap manis",
+        "RecipeId": 6
+      },
+      {
+        "name": "1 sendok makan saus tiram",
+        "RecipeId": 6
+      },
+      {
+        "name": "1 sendok makan minyak wijen",
+        "RecipeId": 6
+      },
+      {
+        "name": "1 sendok makan gula merah, serut",
+        "RecipeId": 6
+      },
+      {
+        "name": "Garam secukupnya",
+        "RecipeId": 6
+      },
+      {
+        "name": "Merica secukupnya",
+        "RecipeId": 6
+      },
+      {
+        "name": "200 gram tahu, potong-potong",
+        "RecipeId": 7
+      },
+      {
+        "name": "200 gram tempe, potong-potong",
+        "RecipeId": 7
+      },
+      {
+        "name": "100 gram kacang panjang, potong-potong",
+        "RecipeId": 7
+      },
+      {
+        "name": "100 gram tauge",
+        "RecipeId": 7
+      },
+      {
+        "name": "2 buah ketimun, iris tipis",
+        "RecipeId": 7
+      },
+      {
+        "name": "2 buah kentang, rebus dan potong-potong",
+        "RecipeId": 7
+      },
+      {
+        "name": "2 lembar daun kol, iris kasar",
+        "RecipeId": 7
+      },
+      {
+        "name": "2 lembar daun selada",
+        "RecipeId": 7
+      },
+      {
+        "name": "100 gram kerupuk",
+        "RecipeId": 7
+      },
+      {
+        "name": "Bawang goreng secukupnya",
+        "RecipeId": 7
+      },
+      {
+        "name": "500 gram daging sapi, potong dadu",
+        "RecipeId": 8
+      },
+      {
+        "name": "100 ml kecap manis",
+        "RecipeId": 8
+      },
+      {
+        "name": "2 sendok makan minyak goreng",
+        "RecipeId": 8
+      },
+      {
+        "name": "1 sendok makan air asam jawa",
+        "RecipeId": 8
+      },
+      {
+        "name": "2 sendok makan gula merah, serut",
+        "RecipeId": 8
+      },
+      {
+        "name": "2 siung bawang putih, haluskan",
+        "RecipeId": 8
+      },
+      {
+        "name": "1/2 sendok teh merica bubuk",
+        "RecipeId": 8
+      },
+      {
+        "name": "Garam secukupnya",
+        "RecipeId": 8
+      },
+      {
+        "name": "Tusuk sate secukupnya",
+        "RecipeId": 8
+      },
+      {
+        "name": "Bumbu kacang:",
+        "RecipeId": 8
+      },
+      {
+        "name": "150 gram kacang tanah, sangrai",
+        "RecipeId": 8
+      },
+      {
+        "name": "3 siung bawang putih",
+        "RecipeId": 8
+      },
+      {
+        "name": "3 buah cabai merah keriting",
+        "RecipeId": 8
+      },
+      {
+        "name": "1 sendok teh gula merah",
+        "RecipeId": 8
+      },
+      {
+        "name": "1 sendok teh air asam jawa",
+        "RecipeId": 8
+      },
+      {
+        "name": "Garam secukupnya",
+        "RecipeId": 8
+      },
+      {
+        "name": "Air secukupnya",
+        "RecipeId": 8
       }
     ],
-  "Steps": [
-    {
-      "instruction": "Step setep membuat nasgor",
-      "image": "ini foto testing",
-      "RecipeId": 2
-    },
-    {
-      "instruction": "Step setep membuat nasi bakar digoreng",
-      "image": "ini foto testing",
-      "RecipeId": 1
-    }
-  ],
-  "Reactions": [
-    {
-      "emoji": "ini emojii",
-      "quantity": 2,
-      "RecipeId": 2,
-      "UserId": 1
-    },
-    {
-      "emoji": "Step setep membuat nasgor",
-      "quantity": 1,
-      "RecipeId": 2,
-      "UserId": 1
-    }
-  ]
-}
+    "Steps": [
+      {
+        "instruction": "Siapkan nasi",
+        "image": "https://img-global.cpcdn.com/steps/293ebada4c7f7cb1/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-1-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Goreng sosis dan nugget (kalau ada). Tiriskan." ,
+        "image": "https://img-global.cpcdn.com/steps/aa969f39a828881f/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-2-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Goreng telur 2 butir. Orak-arik. (Api kecil karena sekalian nyambi iris2).",
+        "image": "https://img-global.cpcdn.com/steps/028ac58c39e7a53b/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-3-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Sementara itu cincang bawang merah dan bawang putih. Sisihkan telur, tumis bumbu sampai harum.",
+        "image": "https://img-global.cpcdn.com/steps/0c3a829ea60bc257/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-4-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Iris sayur. (Wortel saya parut dengan parutan keju).",
+        "image": "https://img-global.cpcdn.com/steps/6df5323426c22fe6/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-5-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Masukkan sayuran kloter 1; wortel dan bakso. Aduk hingga tercampur dan bakso matang.",
+        "image": "https://img-global.cpcdn.com/steps/2a5a7982654eaba6/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-6-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Masukkan nasi. Campur. Pakai api kecil biar ga gosong.",
+        "image": "https://img-global.cpcdn.com/steps/4f7c190708e15731/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-7-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Tambahkan kecap, kaldu, garam. Campur. Tes rasa.",
+        "image": "https://img-global.cpcdn.com/steps/40f2ba2572075859/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-8-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Lalu, tambahkan sayuran sisanya dan cabai yang sudah di iris2. Campur sampai sayuran layu, dan besarkan api agar nasi menjadi pera.",
+        "image": "https://img-global.cpcdn.com/steps/6249f39507aa86a1/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-11-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Alhamdulillah selesai. Selamat menikmati",
+        "image": "https://img-global.cpcdn.com/steps/6c07aeaff601755a/160x128cq70/nasi-goreng-foto-per-step-langkah-memasak-13-foto.webp",
+        "RecipeId": 1
+      },
+      {
+        "instruction": "Panaskan minyak goreng dalam wajan. Tumis bumbu rendang (bumbu rendang instan atau bumbu yang sudah dibuat sebelumnya) hingga harum.",
+        "image": "",
+        "RecipeId": 2
+      },
+      {
+        "instruction": "Masukkan potongan daging sapi ke dalam wajan. Aduk rata dengan bumbu rendang.",
+        "image": "",
+        "RecipeId": 2
+      },
+      {
+        "instruction": "Tambahkan daun jeruk, serai, lengkuas, daun kunyit, dan daun pandan. Aduk rata.",
+        "image": "",
+        "RecipeId": 2
+      },
+      {
+        "instruction": "Tuangkan santan kental dan air ke dalam wajan. Masak dengan api sedang hingga daging empuk dan bumbu meresap, sekitar 2-3 jam.",
+        "image": "",
+        "RecipeId": 2
+      },
+      {
+        "instruction": "Setelah daging empuk, tambahkan gula merah dan garam. Aduk rata dan masak kembali hingga kuah mengental dan berminyak.",
+        "image": "",
+        "RecipeId": 2
+      },
+      {
+        "instruction": "Angkat rendang dari wajan dan sajikan.",
+        "image": "",
+        "RecipeId": 2
+      },
+      {
+        "instruction": "Panaskan minyak goreng dalam wajan. Tumis bawang putih dan jahe hingga harum.",
+        "image": "",
+        "RecipeId": 3
+      },
+      {
+        "instruction": "Masukkan potongan daging ayam. Tumis hingga berubah warna.",
+        "image": "",
+        "RecipeId": 3
+      },
+      {
+        "instruction": "Tuangkan kaldu ayam ke dalam wajan. Tambahkan garam dan merica secukupnya. Biarkan mendidih.",
+        "image": "",
+        "RecipeId": 3
+      },
+      {
+        "instruction": "Siapkan mangkuk. Letakkan mie kuning, tauge, dan telur rebus di dalam mangkuk.",
+        "image": "",
+        "RecipeId": 3
+      },
+      {
+        "instruction": "Siram dengan kuah soto ayam yang panas. Taburi dengan daun bawang, seledri, dan bawang merah goreng.",
+        "image": "",
+        "RecipeId": 3
+      },
+      {
+        "instruction": "Soto mie siap disajikan.",
+        "image": "",
+        "RecipeId": 3
+      },
+      {
+        "instruction": "Panaskan minyak goreng dalam wajan. Tumis bawang putih dan bawang merah hingga harum.",
+        "image": "",
+        "RecipeId": 4
+      },
+      {
+        "instruction": "Masukkan cabai merah halus, daun salam, serai, dan lengkuas. Tumis hingga cabai matang dan harum.",
+        "image": "",
+        "RecipeId": 4
+      },
+      {
+        "instruction": "Tambahkan potongan tomat dan gula merah. Aduk rata.",
+        "image": "",
+        "RecipeId": 4
+      },
+      {
+        "instruction": "Masukkan irisan jengkol dan teri nasi goreng. Aduk hingga teri nasi tercampur merata.",
+        "image": "",
+        "RecipeId": 4
+      },
+      {
+        "instruction": "Tambahkan sedikit air dan garam. Aduk rata. Masak hingga bumbu meresap dan jengkol matang.",
+        "image": "",
+        "RecipeId": 4
+      },
+      {
+        "instruction": "Jengkol Sambel Teri siap disajikan.",
+        "image": "",
+        "RecipeId": 4
+      },
+      {
+        "instruction": "Panaskan minyak goreng dalam wajan. Tumis bawang putih dan bawang merah hingga harum.",
+        "image": "",
+        "RecipeId": 5
+      },
+      {
+        "instruction": "Tambahkan cabai merah besar dan cabai rawit merah. Tumis hingga cabai layu.",
+        "image": "",
+        "RecipeId": 5
+      },
+      {
+        "instruction": "Masukkan daging ayam. Tumis hingga ayam berubah warna.",
+        "image": "",
+        "RecipeId": 5
+      },
+      {
+        "instruction": "Tambahkan terasi bakar, garam, dan merica. Aduk rata.",
+        "image": "",
+        "RecipeId": 5
+      },
+      {
+        "instruction": "Masukkan kangkung. Tumis hingga kangkung layu dan matang.",
+        "image": "",
+        "RecipeId": 5
+      },
+      {
+        "instruction": "Tambahkan kecap manis. Aduk rata. Tumis sebentar hingga bumbu meresap.",
+        "image": "",
+        "RecipeId": 5
+      },
+      {
+        "instruction": "Tumis Kangkung siap disajikan.",
+        "image": "",
+        "RecipeId": 5
+      },
+      {
+        "instruction": "Campur bawang putih, jahe, kecap manis, saus tiram, minyak wijen, gula merah, garam, dan merica dalam wadah.",
+        "image": "",
+        "RecipeId": 6
+      },
+      {
+        "instruction": "Masukkan potongan ayam ke dalam bumbu. Aduk rata hingga ayam terbalut dengan baik. Diamkan selama 1 jam agar bumbu meresap.",
+        "image": "",
+        "RecipeId": 6
+      },
+      {
+        "instruction": "Panaskan panggangan atau teflon dengan api sedang. Panggang ayam hingga matang dan berwarna kecokelatan di kedua sisi.",
+        "image": "",
+        "RecipeId": 6
+      },
+      {
+        "instruction": "Ayam Bakar siap disajikan. Nikmati dengan nasi dan sambal jika diinginkan.",
+        "image": "",
+        "RecipeId": 6
+      },
+      {
+        "instruction": "Rebus tahu, tempe, dan kacang panjang hingga matang. Tiriskan dan biarkan dingin.",
+        "image": "",
+        "RecipeId": 7
+      },
+      {
+        "instruction": "Siapkan piring saji, susun tahu, tempe, kacang panjang, tauge, ketimun, kentang, daun kol, dan selada di atasnya.",
+        "image": "",
+        "RecipeId": 7
+      },
+      {
+        "instruction": "Sajikan dengan bumbu kacang, kerupuk, dan bawang goreng.",
+        "image": "",
+        "RecipeId": 7
+      },
+      {
+        "instruction": "Campur daging sapi dengan kecap manis, minyak goreng, air asam jawa, gula merah, bawang putih, merica bubuk, dan garam. Diamkan selama 30 menit hingga bumbu meresap.",
+        "image": "",
+        "RecipeId": 8
+      },
+      {
+        "instruction": "Tusuk daging sapi yang telah dibumbui dengan tusuk sate.",
+        "image": "",
+        "RecipeId": 8
+      },
+      {
+        "instruction": "Siapkan bumbu kacang: haluskan kacang tanah, bawang putih, cabai merah keriting, gula merah, air asam jawa, garam, dan air. Tumis bumbu kacang hingga matang dan beraroma harum.",
+        "image": "",
+        "RecipeId": 8
+      },
+      {
+        "instruction": "Panggang sate di atas bara api atau grill pan hingga matang dan berwarna kecokelatan.",
+        "image": "",
+        "RecipeId": 8
+      },
+      {
+        "instruction": "Sajikan sate Madura dengan bumbu kacang.",
+        "image": "",
+        "RecipeId": 8
+      }
+    ],
+    "Reactions": [
+      {
+        "emoji": "ini emojii",
+        "quantity": 2,
+        "RecipeId": 2,
+        "UserId": 1
+      },
+      {
+        "emoji": "Step setep membuat nasgor",
+        "quantity": 1,
+        "RecipeId": 2,
+        "UserId": 1
+      }
+    ]
+  }
