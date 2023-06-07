@@ -412,6 +412,8 @@ export const recipeResolvers = {
 
         if (findRecipe.UserId != user.id) throw { name: "Not Authorized" };
 
+        await Reaction.destroy({ where: { RecipeId: recipeId } });
+
         await Step.destroy({ where: { RecipeId: recipeId } });
 
         await Ingredient.destroy({ where: { RecipeId: recipeId } });
