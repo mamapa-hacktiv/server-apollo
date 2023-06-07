@@ -160,7 +160,7 @@ scalar Upload
   
   type Mutation {
     createRecipe(newRecipe: newRecipe): ResponseMessage
-    updateRecipe(newRecipe: newRecipe, recipeId: ID): Recipes
+    updateRecipe(newRecipe: newRecipe, recipeId: ID): ResponseMessage
     deleteRecipe(recipeId: ID): ResponseMessage
   }
 `;
@@ -390,9 +390,9 @@ export const recipeResolvers = {
           },
         });
 
-        const messages = ``;
+        const messages = `Success edit recipe with id ${findRecipe.id}`;
 
-        return await findRecipe.reload();
+        return { messages };
       } catch (error) {
         console.log(error);
         throw error;
