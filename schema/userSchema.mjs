@@ -102,7 +102,7 @@ export const userResolvers = {
           },
           headers: {
             Authorization:
-              "Bearer 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",
+              "Bearer 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",
           },
         });
         console.log(data);

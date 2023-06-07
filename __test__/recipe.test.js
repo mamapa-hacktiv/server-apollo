@@ -156,6 +156,15 @@ const queryCreateRecipe = {
       }`,
 };
 
+const queryUpdateRecipe = {
+  query: `mutation Mutation($recipeId: ID, $newRecipe: newRecipe) {
+    updateRecipe(recipeId: $recipeId, newRecipe: $newRecipe) {
+      message
+    }
+  }
+  `,
+};
+
 const queryDeleteRecipe = {
   query: `mutation Mutation($recipeId: ID) {
         deleteRecipe(recipeId: $recipeId) {
@@ -463,6 +472,92 @@ describe("user testing register", () => {
     expect(response.body.errors).toBeInstanceOf(Array);
     expect(response.body.errors[0]).toHaveProperty("message");
     expect(response.body.errors[0].message).toEqual("invalid signature");
+  });
+
+  it("should be success UpdateRecipe", async () => {
+    // send our request to the url of the test server
+    queryUpdateRecipe.variables = {
+      newRecipe: {
+        videoUrl: "ini video url",
+        title: "Nasi goreng",
+        steps: [
+          {
+            instruction: "Step step membuat nasi digoreng",
+            image: "ini foto testing",
+          },
+        ],
+        portion: 4,
+        origin: "boyolali, jawa tengah, indonesia",
+        ingredients: [
+          {
+            name: "cabai 300gr",
+          },
+          {
+            name: "bawang merah 4 siung",
+          },
+        ],
+        description:
+          "Nasi goreng ayam suwir bisa membuat sarapanmu terasa istimewa. Sajikan dengan tambahan seperti telur mata sapi, acar mentimun,",
+        cookingTime: "1",
+      },
+      recipeId: 1,
+    };
+    const response = await request(urlTest)
+      .post("/")
+      //   .send(queryCreateRecipe)
+      .set({ access_token: createToken({ id: 1, email: "marsh@potao.com" }) })
+      .set("apollo-require-preflight", "true")
+      .field("operations", JSON.stringify(queryUpdateRecipe))
+      .field("map", JSON.stringify({ 0: ["variables.newRecipe.image"] }))
+      .attach("0", "./asset/v996-024.jpg");
+    // console.log(response.body, "<<<");
+    expect(response.body.errors).toBeUndefined();
+    expect(response.body.data).toBeInstanceOf(Object);
+    expect(response.body.data).toHaveProperty("updateRecipe");
+  });
+
+  it("should be failed UpdateRecipe due to data not found", async () => {
+    // send our request to the url of the test server
+    queryUpdateRecipe.variables = {
+      newRecipe: {
+        videoUrl: "ini video url",
+        title: "Nasi goreng",
+        steps: [
+          {
+            instruction: "Step step membuat nasi digoreng",
+            image: "ini foto testing",
+          },
+        ],
+        portion: 4,
+        origin: "boyolali, jawa tengah, indonesia",
+        ingredients: [
+          {
+            name: "cabai 300gr",
+          },
+          {
+            name: "bawang merah 4 siung",
+          },
+        ],
+        description:
+          "Nasi goreng ayam suwir bisa membuat sarapanmu terasa istimewa. Sajikan dengan tambahan seperti telur mata sapi, acar mentimun,",
+        cookingTime: "1",
+      },
+      recipeId: 25,
+    };
+    const response = await request(urlTest)
+      .post("/")
+      //   .send(queryCreateRecipe)
+      .set({ access_token: createToken({ id: 1, email: "marsh@potao.com" }) })
+      .set("apollo-require-preflight", "true")
+      .field("operations", JSON.stringify(queryUpdateRecipe))
+      .field("map", JSON.stringify({ 0: ["variables.newRecipe.image"] }))
+      .attach("0", "./asset/v996-024.jpg");
+    // console.log(response.body, "<<<");
+    expect(response.body.errors).toBeInstanceOf(Array);
+    expect(response.body.errors[0]).toHaveProperty("message");
+    expect(response.body.errors[0].message).toEqual(
+      'Unexpected error value: { name: "NotFound" }'
+    );
   });
 
   it("should be failed deleteRecipe due to user don't have any access_token", async () => {
