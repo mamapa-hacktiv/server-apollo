@@ -160,7 +160,7 @@ scalar Upload
   
   type Mutation {
     createRecipe(newRecipe: newRecipe): ResponseMessage
-    # updateRecipe(newRecipe: newRecipe, recipeId: ID): Recipes
+    updateRecipe(newRecipe: newRecipe, recipeId: ID): Recipes
     deleteRecipe(recipeId: ID): ResponseMessage
   }
 `;
@@ -322,83 +322,82 @@ export const recipeResolvers = {
         throw error;
       }
     },
-    // updateRecipe: async (_, args, contextValue) => {
-    //   try {
-    //     if (!contextValue.access_token) throw { name: "InvalidToken" };
-    //     const {
-    //       title,
-    //       image,
-    //       description,
-    //       videoUrl,
-    //       origin,
-    //       portion,
-    //       cookingTime,
-    //       steps,
-    //       ingredients,
-    //     } = args.newRecipe;
+    updateRecipe: async (_, args, contextValue) => {
+      try {
+        if (!contextValue.access_token) throw { name: "InvalidToken" };
+        const {
+          title,
+          image,
+          description,
+          videoUrl,
+          origin,
+          portion,
+          cookingTime,
+          steps,
+          ingredients,
+        } = args.newRecipe;
 
-    //     const { recipeId } = args;
+        const { recipeId } = args;
 
-    //     const user = await authentication(contextValue.access_token);
+        const user = await authentication(contextValue.access_token);
 
-    //     const findRecipe = await Recipe.findByPk(recipeId);
-    //     if (!findRecipe) throw { name: "NotFound" };
+        const findRecipe = await Recipe.findByPk(recipeId);
+        if (!findRecipe) throw { name: "NotFound" };
 
-    //     //! implement upload image
-    //     const result = await Promise.all(image);
-    //     const imagesBufferPromises = result.map((img) => {
-    //       const stream = img.createReadStream();
-    //       return stream2buffer(stream);
-    //     });
-    //     const imagesBuffer = await Promise.all(imagesBufferPromises);
-    //     const data = await imagekit.upload({
-    //       file: imagesBuffer[0],
-    //       fileName: result[0].filename,
-    //     });
+        await Ingredient.destroy({ where: { RecipeId: recipeId } });
+        await Step.destroy({ where: { RecipeId: recipeId } });
 
-    //     const recipe = {
-    //       title: title,
-    //       image: data.url,
-    //       description: description,
-    //       videoUrl: videoUrl,
-    //       origin: origin,
-    //       portion: portion,
-    //       cookingTime: cookingTime,
-    //       UserId: user.id,
-    //     };
+        // //! implement upload image
+        const result = await Promise.all(image);
+        const imagesBufferPromises = result.map((img) => {
+          const stream = img.createReadStream();
+          return stream2buffer(stream);
+        });
+        const imagesBuffer = await Promise.all(imagesBufferPromises);
+        const data = await imagekit.upload({
+          file: imagesBuffer[0],
+          fileName: result[0].filename,
+        });
 
-    //     const stepsWithRecipeId = steps.map((el) => ({
-    //       ...el,
-    //       RecipeId: recipeId,
-    //     }));
+        const recipe = {
+          title: title,
+          image: data.url,
+          description: description,
+          videoUrl: videoUrl,
+          origin: origin,
+          portion: portion,
+          cookingTime: cookingTime,
+          UserId: user.id,
+        };
 
-    //     const ingredientsWithRecipeId = ingredients.map((el) => ({
-    //       ...el,
-    //       RecipeId: recipeId,
-    //     }));
+        const stepsWithRecipeId = steps.map((el) => ({
+          ...el,
+          RecipeId: recipeId,
+        }));
 
-    //     await Ingredient.bulkCreate(ingredientsWithRecipeId, {
-    //       updateOnDuplicate: ["id", "name", "RecipeId"],
-    //     });
+        const ingredientsWithRecipeId = ingredients.map((el) => ({
+          ...el,
+          RecipeId: recipeId,
+        }));
 
-    //     await Step.bulkCreate(stepsWithRecipeId, {
-    //       updateOnDuplicate: ["id", "instruction", "image", "RecipeId"],
-    //     });
+        await Ingredient.bulkCreate(ingredientsWithRecipeId);
 
-    //     let updateRecipes = await Recipe.update(recipe, {
-    //       where: {
-    //         id: recipeId,
-    //       },
-    //     });
+        await Step.bulkCreate(stepsWithRecipeId);
 
-    //     const messages = ``;
+        let updateRecipes = await Recipe.update(recipe, {
+          where: {
+            id: recipeId,
+          },
+        });
 
-    //     return await findRecipe.reload();
-    //   } catch (error) {
-    //     console.log(error);
-    //     throw error;
-    //   }
-    // },
+        const messages = ``;
+
+        return await findRecipe.reload();
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
     deleteRecipe: async (_, args, contextValue) => {
       try {
         if (!contextValue.access_token) throw { name: "InvalidToken" };
