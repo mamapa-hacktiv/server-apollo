@@ -101,8 +101,7 @@ export const userResolvers = {
             messages: [{ role: "system", content: message }],
           },
           headers: {
-            Authorization:
-              "Bearer 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",
+            Authorization: `Bearer ${process.env.API_KEY_CHATGPT}`,
           },
         });
         console.log(data);
